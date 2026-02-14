@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controller.HomeController"
+            style="-fx-background-color: linear-gradient(to bottom right, #1e3c72, #2a5298);">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox spacing="20"
+              alignment="CENTER_LEFT"
+              style="-fx-padding: 20;
+                     -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);">
+
+            <Label text="Tableau de bord"
+                   style="-fx-text-fill: white;
+                          -fx-font-size: 24px;
+                          -fx-font-weight: bold;"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="Déconnexion"
+                    onAction="#onLogout"
+                    style="-fx-background-radius: 25;
+                           -fx-background-color: #00c6ff;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-padding: 8 20;"/>
+        </HBox>
+    </top>
+
+    <!-- CENTER CONTENT -->
+    <center>
+        <VBox spacing="30"
+              alignment="CENTER"
+              style="-fx-padding: 40;">
+
+            <!-- Card container -->
+            <VBox spacing="25"
+                  alignment="CENTER"
+                  maxWidth="500"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 20;
+                         -fx-padding: 40;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 25,0,0,8);">
+
+                <Label text="Bienvenue sur ATOMIC YOU"
+                       style="-fx-font-size: 20px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #333;"/>
+
+                <Button text="Faire une réclamation"
+                        onAction="#onGoToCreateReclamation"
+                        maxWidth="Infinity"
+                        style="-fx-background-radius: 25;
+                               -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;"/>
+
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

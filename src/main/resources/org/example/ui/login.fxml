@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.ui.LoginController"
+            style="-fx-background-color: linear-gradient(to bottom right, #141e30, #243b55);">
+
+    <center>
+        <HBox>
+
+            <!-- LEFT PANEL (Design / Branding) -->
+            <VBox alignment="CENTER"
+                  spacing="20"
+                  prefWidth="600"
+                  style="-fx-background-color: linear-gradient(to bottom right, #6a11cb, #2575fc);">
+
+                <Label text="ATOMIC YOU"
+                       style="-fx-text-fill: white;
+                              -fx-font-size: 36px;
+                              -fx-font-weight: bold;"/>
+
+                <Label text="Développez votre potentiel intérieur"
+                       style="-fx-text-fill: rgba(255,255,255,0.85);
+                              -fx-font-size: 16px;"/>
+            </VBox>
+
+            <!-- RIGHT PANEL (Login Form) -->
+            <StackPane style="-fx-padding: 60;" HBox.hgrow="ALWAYS">
+
+                <VBox spacing="18"
+                      maxWidth="420"
+                      alignment="CENTER_LEFT"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 20;
+                             -fx-padding: 40;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 30,0,0,10);">
+
+                    <Label text="Connexion"
+                           style="-fx-font-size: 28px;
+                                  -fx-font-weight: bold;
+                                  -fx-text-fill: #222;"/>
+
+                    <Label text="Entrez vos informations"
+                           style="-fx-text-fill: #777;"/>
+
+                    <!-- EMAIL -->
+                    <VBox spacing="6">
+                        <Label text="Email" style="-fx-text-fill: #444;"/>
+                        <TextField fx:id="emailField"
+                                   promptText="example@email.com"
+                                   style="-fx-background-radius: 12;
+                                          -fx-padding: 12;"/>
+                    </VBox>
+
+                    <!-- PASSWORD -->
+                    <VBox spacing="6">
+                        <Label text="Mot de passe" style="-fx-text-fill: #444;"/>
+                        <PasswordField fx:id="passwordField"
+                                       promptText="********"
+                                       style="-fx-background-radius: 12;
+                                              -fx-padding: 12;"/>
+                    </VBox>
+
+                    <Button text="Se connecter"
+                            onAction="#onLogin"
+                            maxWidth="Infinity"
+                            style="-fx-background-radius: 25;
+                                   -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-padding: 12 30;"/>
+
+                    <Label fx:id="messageLabel"
+                           style="-fx-text-fill: #ef4444;"/>
+
+                    <Hyperlink text="Créer un compte"
+                               onAction="#onRegister"
+                               style="-fx-text-fill: #6a11cb;
+                                      -fx-font-weight: bold;"/>
+                    <Hyperlink text="Mot de passe oublié ?"
+                               onAction="#onForgotPassword"
+                               style="-fx-text-fill: #2575fc; -fx-font-weight: bold;"/>
+
+
+                </VBox>
+            </StackPane>
+
+        </HBox>
+    </center>
+
+</BorderPane>

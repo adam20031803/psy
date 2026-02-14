@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.ui.RegisterController"
+            style="-fx-background-color: linear-gradient(to bottom right, #6a11cb, #2575fc);">
+
+    <!-- TOP BAR (comme dashboard) -->
+    <top>
+        <HBox spacing="20"
+              alignment="CENTER_LEFT"
+              style="-fx-padding: 18; -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);">
+            <Label text="Créer un compte"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        </HBox>
+    </top>
+
+    <!-- CENTER -->
+    <center>
+        <StackPane style="-fx-padding: 30;">
+            <VBox spacing="18"
+                  maxWidth="520"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 22;
+                         -fx-padding: 28;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 22,0,0,6);">
+
+                <Label text="Informations du compte"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+
+                <GridPane hgap="14" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+
+                    <!-- Nom -->
+                    <VBox spacing="6" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Nom" style="-fx-text-fill: #444;"/>
+                        <TextField fx:id="nomField" promptText="Nom"
+                                   style="-fx-background-radius: 12; -fx-padding: 10;"/>
+                    </VBox>
+
+                    <!-- Prénom -->
+                    <VBox spacing="6" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                        <Label text="Prénom" style="-fx-text-fill: #444;"/>
+                        <TextField fx:id="prenomField" promptText="Prénom"
+                                   style="-fx-background-radius: 12; -fx-padding: 10;"/>
+                    </VBox>
+
+                    <!-- Âge -->
+                    <VBox spacing="6" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                        <Label text="Âge" style="-fx-text-fill: #444;"/>
+                        <TextField fx:id="ageField" promptText="ex: 20"
+                                   style="-fx-background-radius: 12; -fx-padding: 10;"/>
+                    </VBox>
+
+                    <!-- Téléphone -->
+                    <VBox spacing="6" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                        <Label text="Téléphone" style="-fx-text-fill: #444;"/>
+                        <TextField fx:id="telField" promptText="ex: 55xxxxxx"
+                                   style="-fx-background-radius: 12; -fx-padding: 10;"/>
+                    </VBox>
+
+                    <!-- Email -->
+                    <VBox spacing="6" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2">
+                        <Label text="Email" style="-fx-text-fill: #444;"/>
+                        <TextField fx:id="emailField" promptText="ex: user@email.com"
+                                   style="-fx-background-radius: 12; -fx-padding: 10;"/>
+                    </VBox>
+
+                    <!-- Mot de passe -->
+                    <VBox spacing="6" GridPane.rowIndex="3" GridPane.columnIndex="0">
+                        <Label text="Mot de passe" style="-fx-text-fill: #444;"/>
+                        <PasswordField fx:id="pwdField" promptText="••••••••"
+                                       style="-fx-background-radius: 12; -fx-padding: 10;"/>
+                    </VBox>
+
+                    <!-- Confirmer -->
+                    <VBox spacing="6" GridPane.rowIndex="3" GridPane.columnIndex="1">
+                        <Label text="Confirmer" style="-fx-text-fill: #444;"/>
+                        <PasswordField fx:id="confirmPwdField" promptText="••••••••"
+                                       style="-fx-background-radius: 12; -fx-padding: 10;"/>
+                    </VBox>
+
+                    <!-- ROLE -->
+                    <VBox spacing="6" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2">
+                        <Label text="Rôle" style="-fx-text-fill: #444;"/>
+                        <ComboBox fx:id="roleBox" prefWidth="999"
+                                  style="-fx-background-radius: 12; -fx-padding: 6;"/>
+                    </VBox>
+                </GridPane>
+
+                <!-- ACTIONS -->
+                <HBox spacing="12" alignment="CENTER_RIGHT">
+
+                    <Button text="Créer le compte"
+                            onAction="#onCreateAccount"
+                            style="-fx-background-radius: 25;
+                                   -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-padding: 10 22;"/>
+
+                    <Button text="Retour"
+                            onAction="#onBackToLogin"
+                            style="-fx-background-radius: 25;
+                                   -fx-background-color: #e5e7eb;
+                                   -fx-text-fill: #111827;
+                                   -fx-font-weight: bold;
+                                   -fx-padding: 10 22;"/>
+                </HBox>
+
+                <Label fx:id="messageLabel"
+                       text=""
+                       style="-fx-text-fill: #ef4444; -fx-font-weight: 700;"/>
+
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

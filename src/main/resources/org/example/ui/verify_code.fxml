@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.ui.VerifyCodeController"
+            prefWidth="400" prefHeight="250">
+
+    <VBox alignment="CENTER" spacing="10"
+          layoutX="80" layoutY="50">
+
+        <Label text="Vérifier le code"/>
+
+        <TextField fx:id="codeField" promptText="Code reçu"/>
+
+        <Button text="Vérifier" onAction="#onVerify"/>
+
+        <Label fx:id="messageLabel"/>
+    </VBox>
+</AnchorPane>
