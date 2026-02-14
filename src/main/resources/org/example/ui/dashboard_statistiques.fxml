@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.Region?>
+
+<ScrollPane fitToWidth="true" fitToHeight="true"
+            xmlns="http://javafx.com/javafx/11"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.controller.DashboardStatistiquesController">
+    <content>
+        <BorderPane style="-fx-background-color: #F5F7FA;">
+
+            <!-- HEADER SECTION avec gradient et effets -->
+            <top>
+                <StackPane style="-fx-background-color: linear-gradient(to right, #1a2a6c, #b21f1f, #fdbb2d); -fx-padding: 30 0 30 0;">
+                    <VBox alignment="CENTER" spacing="10">
+                        <!-- Logo ou icône principale -->
+                        <!-- Logo ou icône principale - RENDUE CLIQUABLE -->
+                        <!-- Logo ou icône principale - RENDUE CLIQUABLE AVEC EFFET -->
+                        <StackPane onMouseClicked="#retournerVersChallenges"
+                                   fx:id="logoAccueil"
+                                   style="-fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0, 0, 0);">
+                            <Circle radius="35" fill="rgba(255,255,255,0.2)" />
+                            <Circle radius="28" fill="white" />
+                            <Text text="📊" style="-fx-font-size: 28px;" />
+                        </StackPane>
+
+                        <Label text="TABLEAU DE BORD ANALYTIQUE" style="-fx-font-size: 28px; -fx-font-weight: 900; -fx-text-fill: white; -fx-font-family: 'Segoe UI';">
+                            <font>
+                                <Font name="Segoe UI Bold" size="28.0" />
+                            </font>
+                        </Label>
+
+                        <Label text="Statistiques complètes des Challenges • Coachs • Récompenses" style="-fx-font-size: 14px; -fx-text-fill: rgba(255,255,255,0.8); -fx-font-family: 'Segoe UI';">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+
+                        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 15 0 0 0;">
+                            <Circle radius="4" fill="rgba(255,255,255,0.5)" />
+                            <Label text="Mise à jour en temps réel" style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 12px;" />
+                            <Circle radius="4" fill="rgba(255,255,255,0.5)" />
+                        </HBox>
+                    </VBox>
+
+                    <!-- Ligne décorative en bas -->
+                    <Rectangle height="5" width="1200" style="-fx-fill: linear-gradient(to right, #FFD700, #FFA500, #FF4500);" StackPane.alignment="BOTTOM_CENTER" />
+                </StackPane>
+            </top>
+
+            <!-- CENTER CONTENT - Cartes et graphiques -->
+            <center>
+                <VBox spacing="25" style="-fx-padding: 30; -fx-background-color: #F5F7FA;">
+
+                    <!-- SECTION 1: KPI CARDS - Cartes de statistiques principales -->
+                    <VBox spacing="15">
+                        <Label text="Vue d'ensemble" style="-fx-font-size: 18px; -fx-font-weight: 700; -fx-text-fill: #2C3E50; -fx-font-family: 'Segoe UI';">
+                            <font>
+                                <Font name="Segoe UI Bold" size="18.0" />
+                            </font>
+                        </Label>
+
+                        <GridPane hgap="20" vgap="20">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="25" />
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="25" />
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="25" />
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="25" />
+                            </columnConstraints>
+
+                            <!-- Carte 1: Total Challenges -->
+                            <StackPane style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 5);" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <VBox alignment="CENTER" spacing="15" style="-fx-padding: 25 15;">
+                                    <StackPane>
+                                        <Circle radius="30" fill="linear-gradient(to bottom right, #3498DB, #2980B9)" />
+                                        <Text text="🏆" style="-fx-font-size: 28px;" />
+                                    </StackPane>
+
+                                    <Label text="Challenges" style="-fx-font-size: 14px; -fx-text-fill: #7F8C8D; -fx-font-weight: 600;" />
+
+                                    <Label fx:id="totalChallengesLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: 900; -fx-text-fill: #2C3E50;" />
+
+                                    <HBox alignment="CENTER" spacing="5">
+                                        <Label text="Actifs:" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px;" />
+                                        <Label fx:id="actifsChallengesLabel" text="0" style="-fx-text-fill: #2ECC71; -fx-font-weight: 700; -fx-font-size: 12px;" />
+                                        <Label text="•" style="-fx-text-fill: #7F8C8D;" />
+                                        <Label text="Inactifs:" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px;" />
+                                        <Label fx:id="inactifsChallengesLabel" text="0" style="-fx-text-fill: #E74C3C; -fx-font-weight: 700; -fx-font-size: 12px;" />
+                                    </HBox>
+                                </VBox>
+                            </StackPane>
+
+                            <!-- Carte 2: Total Coachs -->
+                            <StackPane style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 5);" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <VBox alignment="CENTER" spacing="15" style="-fx-padding: 25 15;">
+                                    <StackPane>
+                                        <Circle radius="30" fill="linear-gradient(to bottom right, #9B59B6, #8E44AD)" />
+                                        <Text text="👥" style="-fx-font-size: 28px;" />
+                                    </StackPane>
+
+                                    <Label text="Coachs" style="-fx-font-size: 14px; -fx-text-fill: #7F8C8D; -fx-font-weight: 600;" />
+
+                                    <Label fx:id="totalCoachsLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: 900; -fx-text-fill: #2C3E50;" />
+
+                                    <HBox alignment="CENTER" spacing="5">
+                                        <Label text="Actifs:" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px;" />
+                                        <Label fx:id="actifsCoachsLabel" text="0" style="-fx-text-fill: #2ECC71; -fx-font-weight: 700; -fx-font-size: 12px;" />
+                                        <Label text="•" style="-fx-text-fill: #7F8C8D;" />
+                                        <Label text="Spécialisés:" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px;" />
+                                        <Label fx:id="specialisesCoachsLabel" text="0" style="-fx-text-fill: #3498DB; -fx-font-weight: 700; -fx-font-size: 12px;" />
+                                    </HBox>
+                                </VBox>
+                            </StackPane>
+
+                            <!-- Carte 3: Total Récompenses -->
+                            <StackPane style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 5);" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                <VBox alignment="CENTER" spacing="15" style="-fx-padding: 25 15;">
+                                    <StackPane>
+                                        <Circle radius="30" fill="linear-gradient(to bottom right, #E67E22, #D35400)" />
+                                        <Text text="🎁" style="-fx-font-size: 28px;" />
+                                    </StackPane>
+
+                                    <Label text="Récompenses" style="-fx-font-size: 14px; -fx-text-fill: #7F8C8D; -fx-font-weight: 600;" />
+
+                                    <Label fx:id="totalRecompensesLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: 900; -fx-text-fill: #2C3E50;" />
+
+                                    <HBox alignment="CENTER" spacing="5">
+                                        <Label text="Actives:" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px;" />
+                                        <Label fx:id="activesRecompensesLabel" text="0" style="-fx-text-fill: #2ECC71; -fx-font-weight: 700; -fx-font-size: 12px;" />
+                                        <Label text="•" style="-fx-text-fill: #7F8C8D;" />
+                                        <Label text="Types:" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px;" />
+                                        <Label fx:id="typesRecompensesLabel" text="0" style="-fx-text-fill: #E67E22; -fx-font-weight: 700; -fx-font-size: 12px;" />
+                                    </HBox>
+                                </VBox>
+                            </StackPane>
+
+                            <!-- Carte 4: Taux de complétion -->
+                            <StackPane style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 5);" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                                <VBox alignment="CENTER" spacing="15" style="-fx-padding: 25 15;">
+                                    <StackPane>
+                                        <Circle radius="30" fill="linear-gradient(to bottom right, #2ECC71, #27AE60)" />
+                                        <Text text="📈" style="-fx-font-size: 28px;" />
+                                    </StackPane>
+
+                                    <Label text="Taux d'activité" style="-fx-font-size: 14px; -fx-text-fill: #7F8C8D; -fx-font-weight: 600;" />
+
+                                    <Label fx:id="tauxActiviteLabel" text="0%" style="-fx-font-size: 36px; -fx-font-weight: 900; -fx-text-fill: #2C3E50;" />
+
+                                    <HBox alignment="CENTER" spacing="5">
+                                        <Label text="Moyenne générale" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px;" />
+                                    </HBox>
+                                </VBox>
+                            </StackPane>
+                        </GridPane>
+                    </VBox>
+
+                    <Separator style="-fx-background-color: #E0E0E0; -fx-padding: 10 0;" />
+
+                    <!-- SECTION 2: GRAPHIQUES - Répartition par difficulté et type -->
+                    <GridPane hgap="20" vgap="20">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                        </columnConstraints>
+
+                        <!-- Graphique circulaire: Répartition par difficulté -->
+                        <VBox spacing="15" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                            <Label text="📊 Répartition par difficulté" style="-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #2C3E50;" />
+
+                            <PieChart fx:id="difficultePieChart"
+                                      style="-fx-font-size: 11px;"
+                                      animated="true"
+                                      legendVisible="true"
+                                      labelsVisible="true"
+                                      prefHeight="250"
+                                      startAngle="90">
+                                <data>
+                                    <!-- Les données seront chargées dynamiquement -->
+                                </data>
+                            </PieChart>
+
+                            <!-- Légende personnalisée avec couleurs -->
+                            <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10 0 0 0;">
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Circle radius="8" fill="#27AE60" />
+                                    <Label text="Facile" style="-fx-text-fill: #7F8C8D;" />
+                                </HBox>
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Circle radius="8" fill="#F39C12" />
+                                    <Label text="Moyen" style="-fx-text-fill: #7F8C8D;" />
+                                </HBox>
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Circle radius="8" fill="#E74C3C" />
+                                    <Label text="Difficile" style="-fx-text-fill: #7F8C8D;" />
+                                </HBox>
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Circle radius="8" fill="#8E44AD" />
+                                    <Label text="Expert" style="-fx-text-fill: #7F8C8D;" />
+                                </HBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Graphique circulaire: Répartition par type -->
+                        <VBox spacing="15" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                            <Label text="📂 Répartition par type" style="-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #2C3E50;" />
+
+                            <PieChart fx:id="typePieChart"
+                                      style="-fx-font-size: 11px;"
+                                      animated="true"
+                                      legendVisible="true"
+                                      labelsVisible="true"
+                                      prefHeight="250"
+                                      startAngle="90">
+                                <data>
+                                    <!-- Les données seront chargées dynamiquement -->
+                                </data>
+                            </PieChart>
+
+                            <!-- Légende avec couleurs variées -->
+                            <HBox alignment="CENTER" spacing="15" style="-fx-padding: 10 0 0 0;">
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Circle radius="6" fill="#3498DB" />
+                                    <Label text="Prog" style="-fx-text-fill: #7F8C8D; -fx-font-size: 11px;" />
+                                </HBox>
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Circle radius="6" fill="#E67E22" />
+                                    <Label text="Design" style="-fx-text-fill: #7F8C8D; -fx-font-size: 11px;" />
+                                </HBox>
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Circle radius="6" fill="#F1C40F" />
+                                    <Label text="Marketing" style="-fx-text-fill: #7F8C8D; -fx-font-size: 11px;" />
+                                </HBox>
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Circle radius="6" fill="#1ABC9C" />
+                                    <Label text="Business" style="-fx-text-fill: #7F8C8D; -fx-font-size: 11px;" />
+                                </HBox>
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Circle radius="6" fill="#9B59B6" />
+                                    <Label text="Perso" style="-fx-text-fill: #7F8C8D; -fx-font-size: 11px;" />
+                                </HBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Graphique en barres: Distribution des récompenses par type -->
+                        <VBox spacing="15" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                            <Label text="📊 Distribution des récompenses par type" style="-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #2C3E50;" />
+
+                            <BarChart fx:id="recompensesBarChart"
+                                      style="-fx-font-size: 11px;"
+                                      animated="true"
+                                      legendVisible="false"
+                                      prefHeight="250">
+                                <xAxis>
+                                    <CategoryAxis label="Type de récompense" side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Nombre" side="LEFT" />
+                                </yAxis>
+                            </BarChart>
+                        </VBox>
+                    </GridPane>
+
+                    <Separator style="-fx-background-color: #E0E0E0; -fx-padding: 10 0;" />
+
+                    <!-- SECTION 3: DÉTAILS AVANCÉS -->
+                    <GridPane hgap="20" vgap="20">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
+                        </columnConstraints>
+
+                        <!-- Carte: Top challenges -->
+                        <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                            <Label text="🏆 Top Challenges" style="-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #2C3E50;" />
+
+                            <VBox fx:id="topChallengesList" spacing="8" style="-fx-padding: 10 0;">
+                                <!-- Les éléments seront ajoutés dynamiquement -->
+                                <Label text="Aucun challenge disponible" style="-fx-text-fill: #95A5A6; -fx-font-style: italic;" />
+                            </VBox>
+
+                            <Line startX="0" startY="0" endX="300" endY="0" style="-fx-stroke: #ECF0F1; -fx-stroke-width: 1;" />
+
+                            <HBox alignment="CENTER_RIGHT" style="-fx-padding: 5 0 0 0;">
+                                <Label text="Voir tout →" style="-fx-text-fill: #3498DB; -fx-font-size: 12px; -fx-cursor: hand;" />
+                            </HBox>
+                        </VBox>
+
+                        <!-- Carte: Coachs du mois -->
+                        <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                            <Label text="🌟 Coachs du mois" style="-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #2C3E50;" />
+
+                            <VBox fx:id="topCoachsList" spacing="8" style="-fx-padding: 10 0;">
+                                <!-- Les éléments seront ajoutés dynamiquement -->
+                                <Label text="Aucun coach disponible" style="-fx-text-fill: #95A5A6; -fx-font-style: italic;" />
+                            </VBox>
+
+                            <Line startX="0" startY="0" endX="300" endY="0" style="-fx-stroke: #ECF0F1; -fx-stroke-width: 1;" />
+
+                            <HBox alignment="CENTER_RIGHT" style="-fx-padding: 5 0 0 0;">
+                                <Label text="Voir tout →" style="-fx-text-fill: #3498DB; -fx-font-size: 12px; -fx-cursor: hand;" />
+                            </HBox>
+                        </VBox>
+
+                        <!-- Carte: Récompenses populaires -->
+                        <VBox spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                            <Label text="🎁 Récompenses populaires" style="-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #2C3E50;" />
+
+                            <VBox fx:id="topRecompensesList" spacing="8" style="-fx-padding: 10 0;">
+                                <!-- Les éléments seront ajoutés dynamiquement -->
+                                <Label text="Aucune récompense disponible" style="-fx-text-fill: #95A5A6; -fx-font-style: italic;" />
+                            </VBox>
+
+                            <Line startX="0" startY="0" endX="300" endY="0" style="-fx-stroke: #ECF0F1; -fx-stroke-width: 1;" />
+
+                            <HBox alignment="CENTER_RIGHT" style="-fx-padding: 5 0 0 0;">
+                                <Label text="Voir tout →" style="-fx-text-fill: #3498DB; -fx-font-size: 12px; -fx-cursor: hand;" />
+                            </HBox>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- SECTION 4: PROGRESSION ET OBJECTIFS -->
+                    <!-- SECTION 4: PROGRESSION ET OBJECTIFS -->
+                    <GridPane hgap="20" vgap="20">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="70" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="30" />
+                        </columnConstraints>
+
+                        <!-- Barre de progression avec pourcentage à droite -->
+                        <VBox spacing="15" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <VBox spacing="15" HBox.hgrow="ALWAYS">
+                                    <Label text="📈 Progression mensuelle" style="-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #1e3c72;" />
+
+                                    <HBox alignment="CENTER_LEFT" spacing="20">
+                                        <Label text="Objectif:" style="-fx-text-fill: #7F8C8D; -fx-font-size: 14px;" />
+                                        <Label fx:id="objectifMensuelLabel" text="0/20" style="-fx-font-weight: 700; -fx-text-fill: #2C3E50; -fx-font-size: 14px;" />
+                                    </HBox>
+
+                                    <StackPane style="-fx-background-color: #ECF0F1; -fx-background-radius: 20; -fx-pref-height: 25;">
+                                        <Rectangle fx:id="progressionBar"
+                                                   style="-fx-fill: linear-gradient(to right, #3498DB, #9B59B6); -fx-arc-height: 20; -fx-arc-width: 20;"
+                                                   height="25" width="0" StackPane.alignment="CENTER_LEFT" />
+                                    </StackPane>
+                                </VBox>
+
+                                <!-- Label du pourcentage à droite -->
+                                <Label fx:id="progressionPourcentageLabel" text="0%"
+                                       style="-fx-font-size: 18px; -fx-font-weight: 700; -fx-text-fill: #2C3E50; -fx-min-width: 70px; -fx-alignment: CENTER_RIGHT;"/>
+                            </HBox>
+
+                            <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10 0 0 0;">
+                                <Label text="🎯 Objectif: 100%" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px;" />
+                            </HBox>
+                        </VBox>
+
+                        <!-- Carte: Date et heure (inchangée) -->
+                        <VBox spacing="15" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-background-color: linear-gradient(to bottom right, #2C3E50, #1A2634); -fx-background-radius: 20; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 5);">
+                            <Label text="📅 Aujourd'hui" style="-fx-font-size: 14px; -fx-text-fill: rgba(255,255,255,0.7);" />
+                            <Label fx:id="dateActuelleLabel" text="01/01/2024" style="-fx-font-size: 22px; -fx-font-weight: 700; -fx-text-fill: white;" />
+                            <Label fx:id="heureActuelleLabel" text="00:00" style="-fx-font-size: 18px; -fx-text-fill: #F1C40F; -fx-font-weight: 700;" />
+                            <Separator style="-fx-background-color: rgba(255,255,255,0.2);" />
+                            <HBox alignment="CENTER_LEFT" spacing="5">
+                                <Circle radius="4" fill="#2ECC71" />
+                                <Label text="Système opérationnel" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 11px;" />
+                            </HBox>
+                        </VBox>
+                    </GridPane>
+                    <!-- Espace en bas -->
+                    <Region prefHeight="20" />
+                </VBox>
+            </center>
+
+            <!-- FOOTER -->
+            <bottom>
+                <VBox style="-fx-background-color: #2C3E50; -fx-padding: 20 0;">
+                    <HBox alignment="CENTER" spacing="30">
+                        <Label text="© 2024 Dashboard Analytique" style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 12px;" />
+                        <Circle radius="3" fill="rgba(255,255,255,0.3)" />
+                        <Label text="Dernière mise à jour: " style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 12px;" />
+                        <Label fx:id="derniereMajLabel" text="Aujourd'hui" style="-fx-text-fill: #F1C40F; -fx-font-size: 12px; -fx-font-weight: 700;" />
+                        <Circle radius="3" fill="rgba(255,255,255,0.3)" />
+                        <Label text="Version 2.0" style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 12px;" />
+                    </HBox>
+
+                    <HBox alignment="CENTER" spacing="20" style="-fx-padding: 15 0 5 0;">
+                        <HBox spacing="10" alignment="CENTER">
+                            <Circle radius="4" fill="#3498DB" />
+                            <Label text="Challenges" style="-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 10px;" />
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER">
+                            <Circle radius="4" fill="#9B59B6" />
+                            <Label text="Coachs" style="-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 10px;" />
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER">
+                            <Circle radius="4" fill="#E67E22" />
+                            <Label text="Récompenses" style="-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 10px;" />
+                        </HBox>
+                    </HBox>
+                </VBox>
+            </bottom>
+        </BorderPane>
+    </content>
+</ScrollPane>
