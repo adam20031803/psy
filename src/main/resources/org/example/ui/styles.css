@@ -1,0 +1,257 @@
+/* ====================================================================
+   CHALLENGE MANAGER PRO - STYLESHEET PREMIUM (CORRECTED)
+   Design sophistiqué, moderne et professionnel
+   ==================================================================== */
+
+/* ================= GLOBAL STYLES ================= */
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-smoothing-type: lcd;
+}
+
+/* ================= TABLE STYLES ================= */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);
+    -fx-background-radius: 10 10 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10 5;
+}
+
+.table-view .table-cell {
+    -fx-padding: 12 8;
+    -fx-border-color: transparent transparent #F0F0F0 transparent;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 12px;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #FAFBFC;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #E8F4F8 0%, #D4E9F7 100%);
+    -fx-text-fill: #2C3E50;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #F0F7FA;
+    -fx-cursor: hand;
+}
+
+/* ================= TEXTFIELD STYLES ================= */
+.text-field,
+.text-area {
+    -fx-background-color: #F8F9FA;
+    -fx-background-radius: 12;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 12;
+    -fx-border-width: 1.5;
+    -fx-padding: 12;
+    -fx-font-size: 13px;
+    -fx-text-fill: #2C3E50;
+}
+
+.text-field:focused,
+.text-area:focused {
+    -fx-border-color: #667eea;
+    -fx-border-width: 2;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.2), 8, 0, 0, 0);
+}
+
+/* ================= COMBOBOX STYLES ================= */
+.combo-box {
+    -fx-background-color: #F8F9FA;
+    -fx-background-radius: 12;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 12;
+    -fx-border-width: 1.5;
+}
+
+.combo-box:focused {
+    -fx-border-color: #667eea;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.2), 8, 0, 0, 0);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 8;
+}
+
+.combo-box .list-cell:selected {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 5);
+}
+
+/* ================= BUTTON STYLES ================= */
+.button {
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 10 20;
+    -fx-font-size: 13px;
+}
+
+.button:hover {
+    -fx-opacity: 0.9;
+}
+
+.button:pressed {
+    -fx-opacity: 0.8;
+}
+
+/* ================= CHECKBOX STYLES ================= */
+.check-box {
+    -fx-font-size: 13px;
+    -fx-text-fill: #2C3E50;
+}
+
+.check-box .box {
+    -fx-background-color: #F8F9FA;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-border-width: 2;
+}
+
+.check-box:selected .box {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #11998e 0%, #38ef7d 100%);
+    -fx-border-color: #11998e;
+}
+
+.check-box .mark {
+    -fx-background-color: white;
+}
+
+.check-box:hover .box {
+    -fx-border-color: #667eea;
+}
+
+/* ================= SCROLLBAR STYLES ================= */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #C7C8CA 0%, #A9AAAC 100%);
+    -fx-background-radius: 10;
+    -fx-background-insets: 2;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);
+}
+
+.scroll-bar .track {
+    -fx-background-color: #F5F5F5;
+    -fx-background-radius: 10;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+}
+
+/* ================= SEPARATOR STYLES ================= */
+.separator .line {
+    -fx-border-color: #E8EAF6;
+    -fx-border-width: 1;
+    -fx-opacity: 0.6;
+}
+
+/* ================= TOOLTIP STYLES ================= */
+.tooltip {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #2C3E50 0%, #34495E 100%);
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);
+}
+
+/* ================= LABEL STYLES ================= */
+.label-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+.label-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7F8C8D;
+}
+
+.label-section {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+}
+
+/* ================= PROGRESS INDICATOR ================= */
+.progress-indicator {
+    -fx-progress-color: #667eea;
+}
+
+/* ================= CONTEXT MENU ================= */
+.context-menu {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);
+}
+
+.menu-item {
+    -fx-padding: 10 20;
+}
+
+.menu-item:focused {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);
+    -fx-text-fill: white;
+}
+
+/* ================= ALERT DIALOG ================= */
+.alert {
+    -fx-background-color: white;
+}
+
+.alert .header-panel {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);
+}
+
+.alert .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
