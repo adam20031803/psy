@@ -8,10 +8,8 @@
             fx:controller="org.example.controller.ReclamationListController"
             style="-fx-background-color: linear-gradient(to bottom right, #1e3c72, #2a5298);">
 
-    <!-- TOP BAR -->
     <top>
-        <HBox spacing="20"
-              alignment="CENTER_RIGHT"
+        <HBox spacing="20" alignment="CENTER_RIGHT"
               style="-fx-padding: 20;
                      -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);">
 
@@ -22,8 +20,7 @@
 
             <Region HBox.hgrow="ALWAYS"/>
 
-            <Button text="Retour"
-                    onAction="#onBack"
+            <Button text="Retour" onAction="#onBack"
                     style="-fx-background-radius: 25;
                            -fx-background-color: #00c6ff;
                            -fx-text-fill: white;
@@ -32,13 +29,9 @@
         </HBox>
     </top>
 
-    <!-- CENTER CONTENT -->
     <center>
-        <VBox spacing="18"
-              style="-fx-padding: 30;"
-              VBox.vgrow="ALWAYS">
+        <VBox spacing="14" style="-fx-padding: 30;" VBox.vgrow="ALWAYS">
 
-            <!-- TABLE CARD -->
             <VBox style="-fx-background-color: white;
                          -fx-background-radius: 20;
                          -fx-padding: 20;
@@ -50,39 +43,63 @@
                               -fx-font-weight: bold;
                               -fx-text-fill: #333;"/>
 
-                <TableView fx:id="table"
-                           editable="false"
-                           VBox.vgrow="ALWAYS"
+                <TableView fx:id="table" editable="false" VBox.vgrow="ALWAYS"
                            style="-fx-background-radius: 15;
                                   -fx-border-radius: 15;
                                   -fx-table-cell-border-color: transparent;
                                   -fx-control-inner-background: white;">
 
                     <columns>
-                        <TableColumn fx:id="colId" text="ID" prefWidth="90"/>
-                        <TableColumn fx:id="colUserId" text="User ID" prefWidth="120"/>
-                        <TableColumn fx:id="colSujet" text="Sujet" prefWidth="220"/>
-                        <TableColumn fx:id="colDescription" text="Description" prefWidth="360"/>
-                        <TableColumn fx:id="colStatut" text="Statut" prefWidth="160"/>
-                        <TableColumn fx:id="colPriorite" text="Priorité" prefWidth="160"/>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="70"/>
+                        <TableColumn fx:id="colUserId" text="User ID" prefWidth="90"/>
+                        <TableColumn fx:id="colSujet" text="Sujet" prefWidth="160"/>
+                        <TableColumn fx:id="colDescription" text="Description" prefWidth="260"/>
+                        <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+                        <TableColumn fx:id="colPriorite" text="Priorité" prefWidth="120"/>
                     </columns>
-
                 </TableView>
 
-            </VBox>
+                <!-- FORM EDIT -->
+                <Separator />
 
+                <GridPane hgap="12" vgap="10" style="-fx-padding: 12 0 0 0;">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="15"/>
+                        <ColumnConstraints percentWidth="35"/>
+                        <ColumnConstraints percentWidth="15"/>
+                        <ColumnConstraints percentWidth="35"/>
+                    </columnConstraints>
+
+                    <Label text="Sujet:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="sujetField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Priorité:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                    <ComboBox fx:id="prioriteBox" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                    <Label text="Statut:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <ComboBox fx:id="statutBox" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="Description:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextArea fx:id="descriptionArea" prefRowCount="3"
+                              GridPane.rowIndex="2" GridPane.columnIndex="1"
+                              GridPane.columnSpan="3"/>
+                </GridPane>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                    <Button text="Refresh" onAction="#onRefresh"
+                            style="-fx-background-color: #64748b; -fx-text-fill: white; -fx-background-radius: 12;"/>
+                    <Button text="Update" onAction="#onUpdate"
+                            style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-background-radius: 12;"/>
+                    <Button text="Delete" onAction="#onDelete"
+                            style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 12;"/>
+                </HBox>
+
+                <Label fx:id="messageLabel" text=""
+                       style="-fx-padding: 10 0 0 0;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #ef4444;"/>
+
+            </VBox>
         </VBox>
     </center>
-
-    <!-- BOTTOM -->
-    <bottom>
-        <HBox alignment="CENTER_RIGHT"
-              style="-fx-padding: 25;">
-
-            <!-- Optionnel : bouton secondaire en bas -->
-            <Label text=""
-                   style="-fx-text-fill: rgba(255,255,255,0.75);"/>
-        </HBox>
-    </bottom>
-
 </BorderPane>
