@@ -42,7 +42,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import java.awt.Color;
 
 
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -54,17 +53,12 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
 
 
-
-
-import javafx.scene.Cursor;
-import javafx.scene.shape.Circle;
 import java.awt.Color;
 import javafx.scene.layout.StackPane;
 
 
 import javafx.scene.Cursor;
 import javafx.scene.shape.Circle;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.control.ScrollPane;
