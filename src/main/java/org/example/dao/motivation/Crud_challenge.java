@@ -1,6 +1,4 @@
-package org.example.dao;
-
-
+package org.example.dao.motivation;
 
 import java.util.List;
 
@@ -17,5 +15,6 @@ public interface Crud_challenge<T> {
 
     // DELETE
     void delete(int id);
+
     void delete_reel(int id);
 }

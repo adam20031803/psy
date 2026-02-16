@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.model.motivation;
 
 public class Recompense {
     private int idRecompense;
@@ -9,7 +9,8 @@ public class Recompense {
     private boolean actif;
 
     // Constructeurs
-    public Recompense() {}
+    public Recompense() {
+    }
 
     public Recompense(String titre, String description, String typeRecompense, String conditionObtention) {
         this.titre = titre;

@@ -1,7 +1,7 @@
-package org.example.dao;
+package org.example.dao.motivation;
 
-import org.example.model.CoachMotivation;
-import org.example.model.Challenge;
+import org.example.model.motivation.CoachMotivation;
+import org.example.model.motivation.Challenge;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -133,7 +133,7 @@ public class ChallengeCoachCrud {
         String sql = "SELECT id_challenge, COUNT(*) as coach_count FROM challenge_coach GROUP BY id_challenge";
 
         try (Statement stmt = cnx.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 int challengeId = rs.getInt("id_challenge");
@@ -181,7 +181,7 @@ public class ChallengeCoachCrud {
         String sql = "SELECT id_coach, COUNT(*) as challenge_count FROM challenge_coach GROUP BY id_coach";
 
         try (Statement stmt = cnx.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 int coachId = rs.getInt("id_coach");

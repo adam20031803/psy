@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import org.example.service.PasswordResetService;
-import org.example.util.SceneUtil;
+import org.example.controller.SceneUtil;
 
 public class VerifyCodeController {
 
