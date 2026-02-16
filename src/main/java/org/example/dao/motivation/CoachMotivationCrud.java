@@ -1,6 +1,6 @@
-package org.example.dao;
+package org.example.dao.motivation;
 
-import org.example.model.CoachMotivation;
+import org.example.model.motivation.CoachMotivation;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class CoachMotivationCrud implements CrudCoach<CoachMotivation> {
         List<CoachMotivation> list = new ArrayList<>();
         String sql = "SELECT * FROM coach_motivation ";
         try (Statement st = cnx.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+                ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
                 CoachMotivation c = new CoachMotivation();

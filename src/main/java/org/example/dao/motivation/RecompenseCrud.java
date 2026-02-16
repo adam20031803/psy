@@ -1,6 +1,6 @@
-package org.example.dao;
+package org.example.dao.motivation;
 
-import org.example.model.Recompense;
+import org.example.model.motivation.Recompense;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class RecompenseCrud implements CrudRecompense<Recompense> {
         List<Recompense> list = new ArrayList<>();
         String sql = "SELECT * FROM recompense"; // ENLEVEZ "WHERE actif = 1"
         try (Statement st = cnx.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+                ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
                 Recompense r = new Recompense();
@@ -80,8 +80,10 @@ public class RecompenseCrud implements CrudRecompense<Recompense> {
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
             ps.setInt(1, id);
             int rows = ps.executeUpdate();
-            if (rows > 0) System.out.println("Récompense ID " + id + " supprimée (soft delete).");
-            else System.out.println("Aucune récompense trouvée avec l'ID " + id);
+            if (rows > 0)
+                System.out.println("Récompense ID " + id + " supprimée (soft delete).");
+            else
+                System.out.println("Aucune récompense trouvée avec l'ID " + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -94,8 +96,10 @@ public class RecompenseCrud implements CrudRecompense<Recompense> {
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
             ps.setInt(1, id);
             int rows = ps.executeUpdate();
-            if (rows > 0) System.out.println("Récompense ID " + id + " supprimée de la base !");
-            else System.out.println("Aucune récompense trouvée avec l'ID " + id);
+            if (rows > 0)
+                System.out.println("Récompense ID " + id + " supprimée de la base !");
+            else
+                System.out.println("Aucune récompense trouvée avec l'ID " + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

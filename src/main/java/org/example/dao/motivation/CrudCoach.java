@@ -1,8 +1,8 @@
-package org.example.dao;
+package org.example.dao.motivation;
 
-import org.example.model.Challenge;
-import org.example.model.ChallengeRecompense;
-import org.example.model.Recompense;
+import org.example.model.motivation.Challenge;
+import org.example.model.motivation.ChallengeRecompense;
+import org.example.model.motivation.Recompense;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,10 +10,14 @@ import java.util.List;
 
 public interface CrudCoach<T> {
     void create(T t);
+
     List<T> readAll();
+
     void update(T t);
-    void delete(int id);       // soft delete
-    void delete_reel(int id);  // vrai delete
+
+    void delete(int id); // soft delete
+
+    void delete_reel(int id); // vrai delete
 
     class ChallengeRecompenseCrud {
 
@@ -49,11 +53,11 @@ public interface CrudCoach<T> {
         public List<Recompense> getRecompensesByChallenge(int idChallenge) {
             List<Recompense> recompenses = new ArrayList<>();
             String sql = """
-                SELECT r.* FROM recompense r
-                INNER JOIN challenge_recompense cr ON r.id_recompense = cr.id_recompense
-                WHERE cr.id_challenge = ? AND r.actif = 1
-                ORDER BY r.titre
-                """;
+                    SELECT r.* FROM recompense r
+                    INNER JOIN challenge_recompense cr ON r.id_recompense = cr.id_recompense
+                    WHERE cr.id_challenge = ? AND r.actif = 1
+                    ORDER BY r.titre
+                    """;
 
             try (PreparedStatement ps = cnx.prepareStatement(sql)) {
                 ps.setInt(1, idChallenge);
@@ -79,11 +83,11 @@ public interface CrudCoach<T> {
         public List<Challenge> getChallengesByRecompense(int idRecompense) {
             List<Challenge> challenges = new ArrayList<>();
             String sql = """
-                SELECT c.* FROM challenge c
-                INNER JOIN challenge_recompense cr ON c.id_challenge = cr.id_challenge
-                WHERE cr.id_recompense = ? AND c.actif = 1
-                ORDER BY c.titre
-                """;
+                    SELECT c.* FROM challenge c
+                    INNER JOIN challenge_recompense cr ON c.id_challenge = cr.id_challenge
+                    WHERE cr.id_recompense = ? AND c.actif = 1
+                    ORDER BY c.titre
+                    """;
 
             try (PreparedStatement ps = cnx.prepareStatement(sql)) {
                 ps.setInt(1, idRecompense);
@@ -110,22 +114,22 @@ public interface CrudCoach<T> {
         public List<ChallengeRecompense> getAllAssociations() {
             List<ChallengeRecompense> associations = new ArrayList<>();
             String sql = """
-                SELECT 
-                    cr.id_challenge,
-                    cr.id_recompense,
-                    c.titre as titre_challenge,
-                    r.titre as titre_recompense,
-                    r.type_recompense,
-                    cr.date_attribution
-                FROM challenge_recompense cr
-                INNER JOIN challenge c ON cr.id_challenge = c.id_challenge
-                INNER JOIN recompense r ON cr.id_recompense = r.id_recompense
-                WHERE c.actif = 1 AND r.actif = 1
-                ORDER BY cr.date_attribution DESC
-                """;
+                    SELECT
+                        cr.id_challenge,
+                        cr.id_recompense,
+                        c.titre as titre_challenge,
+                        r.titre as titre_recompense,
+                        r.type_recompense,
+                        cr.date_attribution
+                    FROM challenge_recompense cr
+                    INNER JOIN challenge c ON cr.id_challenge = c.id_challenge
+                    INNER JOIN recompense r ON cr.id_recompense = r.id_recompense
+                    WHERE c.actif = 1 AND r.actif = 1
+                    ORDER BY cr.date_attribution DESC
+                    """;
 
             try (Statement st = cnx.createStatement();
-                 ResultSet rs = st.executeQuery(sql)) {
+                    ResultSet rs = st.executeQuery(sql)) {
 
                 while (rs.next()) {
                     ChallengeRecompense cr = new ChallengeRecompense();

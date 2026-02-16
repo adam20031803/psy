@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.controller.motivation;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,16 +15,14 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
-import org.example.dao.CoachMotivationCrud;
-import org.example.dao.ChallengeCoachCrud;
-import org.example.model.CoachMotivation;
-import org.example.model.Challenge;
+import org.example.dao.motivation.CoachMotivationCrud;
+import org.example.dao.motivation.ChallengeCoachCrud;
+import org.example.model.motivation.CoachMotivation;
+import org.example.model.motivation.Challenge;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-
-
 
 // ================= IMPORTS POUR EXPORT PDF =================
 import java.io.File;
@@ -47,38 +45,63 @@ import java.text.Normalizer;
 public class CoachController implements Initializable {
 
     // ================= LISTVIEW =================
-    @FXML private ListView<CoachMotivation> coachListView;
+    @FXML
+    private ListView<CoachMotivation> coachListView;
 
     // ================= FORMULAIRE =================
-    @FXML private TextField searchField;
-    @FXML private Button searchBtn;
-    @FXML private Button refreshBtn;
-    @FXML private Button challengeBtn;
-    @FXML private Button recBtn;
-    @FXML private Button exportBtn;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Button searchBtn;
+    @FXML
+    private Button refreshBtn;
+    @FXML
+    private Button challengeBtn;
+    @FXML
+    private Button recBtn;
+    @FXML
+    private Button exportBtn;
 
-    @FXML private TextField nomField;
-    @FXML private ComboBox<String> styleComboBox;
-    @FXML private TextArea descField;
-    @FXML private CheckBox actifField;
-    @FXML private TextField specialitesField;
+    @FXML
+    private TextField nomField;
+    @FXML
+    private ComboBox<String> styleComboBox;
+    @FXML
+    private TextArea descField;
+    @FXML
+    private CheckBox actifField;
+    @FXML
+    private TextField specialitesField;
 
-    @FXML private Button addBtn;
-    @FXML private Button updateBtn;
-    @FXML private Button deleteBtn;
-    @FXML private Button clearBtn;
+    @FXML
+    private Button addBtn;
+    @FXML
+    private Button updateBtn;
+    @FXML
+    private Button deleteBtn;
+    @FXML
+    private Button clearBtn;
 
     // ================= STATISTIQUES =================
-    @FXML private Label totalLabel;
-    @FXML private Label actifsLabel;
-    @FXML private Label stylesLabel;
-    @FXML private Label popularStyleLabel;
-    @FXML private Label engagementLabel;
+    @FXML
+    private Label totalLabel;
+    @FXML
+    private Label actifsLabel;
+    @FXML
+    private Label stylesLabel;
+    @FXML
+    private Label popularStyleLabel;
+    @FXML
+    private Label engagementLabel;
 
-    @FXML private Label selectedCoachLabel;
-    @FXML private Label challengesCountLabel;
-    @FXML private Label dateAjoutLabel;
-    @FXML private Label successRateLabel;
+    @FXML
+    private Label selectedCoachLabel;
+    @FXML
+    private Label challengesCountLabel;
+    @FXML
+    private Label dateAjoutLabel;
+    @FXML
+    private Label successRateLabel;
 
     private ObservableList<CoachMotivation> coachList = FXCollections.observableArrayList();
     private CoachMotivationCrud coachCrud = new CoachMotivationCrud();
@@ -95,7 +118,19 @@ public class CoachController implements Initializable {
         loadData();
         updateStatistics();
 
+        checkRole();
+
         System.out.println("=== INITIALIZATION COACH CONTROLLER END ===");
+    }
+
+    private void checkRole() {
+        if (!org.example.util.Session.isAdmin()) {
+            addBtn.setVisible(false);
+            updateBtn.setVisible(false);
+            deleteBtn.setVisible(false);
+            // Maybe hide form fields or clearBtn?
+            // preventing actions is enough for now.
+        }
     }
 
     private void setupListView() {
@@ -136,7 +171,8 @@ public class CoachController implements Initializable {
                 nameLabel.setWrapText(true);
                 nameLabel.setMaxWidth(250);
 
-                statusLabel.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 3 8; -fx-background-radius: 10;");
+                statusLabel.setStyle(
+                        "-fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 3 8; -fx-background-radius: 10;");
 
                 // Style
                 styleLabel.setStyle("-fx-text-fill: #9B59B6; -fx-font-size: 12px; -fx-font-weight: bold;");
@@ -269,7 +305,8 @@ public class CoachController implements Initializable {
                         challengesLabel.setText("🏆 Aucun challenge");
                         challengesLabel.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 11px;");
                     } else {
-                        challengesLabel.setText("🏆 " + challengeCount + " challenge" + (challengeCount != 1 ? "s" : ""));
+                        challengesLabel
+                                .setText("🏆 " + challengeCount + " challenge" + (challengeCount != 1 ? "s" : ""));
                         challengesLabel.setStyle("-fx-text-fill: #F1C40F; -fx-font-size: 11px; -fx-font-weight: bold;");
                     }
 
@@ -292,7 +329,8 @@ public class CoachController implements Initializable {
                     Label challengeIcon = new Label("🏆");
                     Label challengeCountLabel = new Label(String.valueOf(challengeCount));
                     challengeCountLabel.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: black;");
-                    challengeBadge.setStyle("-fx-background-color: rgba(155,89,182,0.2); -fx-background-radius: 10; -fx-padding: 3 8;");
+                    challengeBadge.setStyle(
+                            "-fx-background-color: rgba(155,89,182,0.2); -fx-background-radius: 10; -fx-padding: 3 8;");
                     challengeBadge.getChildren().addAll(challengeIcon, challengeCountLabel);
 
                     statsBox.getChildren().addAll(idLabel, challengeBadge);
@@ -318,8 +356,7 @@ public class CoachController implements Initializable {
                         loadCoachData(newVal);
                         updateCoachStatistics(newVal);
                     }
-                }
-        );
+                });
 
         // Style de la ListView
         coachListView.setStyle("-fx-background-color: transparent; " +
@@ -338,8 +375,7 @@ public class CoachController implements Initializable {
                 "Développement personnel",
                 "Coaching sportif",
                 "Coaching professionnel",
-                "Autre"
-        );
+                "Autre");
 
         // Valeur par défaut
         if (!styleComboBox.getItems().isEmpty()) {
@@ -397,7 +433,7 @@ public class CoachController implements Initializable {
                     showFieldError(descField, "La description ne doit pas être composée uniquement de chiffres");
                     return;
                 }
-                if (!newValue.matches("(?s).*[\\p{L}\\p{M}].*")){
+                if (!newValue.matches("(?s).*[\\p{L}\\p{M}].*")) {
                     showFieldError(descField, "La description doit contenir au moins une lettre");
                     return;
                 }
@@ -490,7 +526,8 @@ public class CoachController implements Initializable {
         } else if (description.matches("\\d+")) {
             showFieldError(descField, "La description ne doit pas être composée uniquement de chiffres");
             if (isValid) {
-                showAlert("Validation", "La description ne doit pas être composée uniquement de chiffres", Alert.AlertType.WARNING);
+                showAlert("Validation", "La description ne doit pas être composée uniquement de chiffres",
+                        Alert.AlertType.WARNING);
                 descField.requestFocus();
             }
             isValid = false;
@@ -554,14 +591,14 @@ public class CoachController implements Initializable {
     }
 
     private void addCoach() {
-        if (!validateForm()) return;
+        if (!validateForm())
+            return;
 
         try {
             CoachMotivation coach = new CoachMotivation(
                     nomField.getText().trim(),
                     styleComboBox.getValue(),
-                    descField.getText().trim()
-            );
+                    descField.getText().trim());
 
             coach.setActif(actifField.isSelected());
 
@@ -583,7 +620,8 @@ public class CoachController implements Initializable {
             return;
         }
 
-        if (!validateForm()) return;
+        if (!validateForm())
+            return;
 
         try {
             selected.setNomCoach(nomField.getText().trim());
@@ -658,15 +696,19 @@ public class CoachController implements Initializable {
         clearFieldError(descField);
 
         // Réinitialiser les statistiques du coach sélectionné
-        if (selectedCoachLabel != null) selectedCoachLabel.setText("Aucun coach sélectionné");
-        if (challengesCountLabel != null) challengesCountLabel.setText("0");
-        if (dateAjoutLabel != null) dateAjoutLabel.setText("--/--/----");
-        if (successRateLabel != null) successRateLabel.setText("--%");
+        if (selectedCoachLabel != null)
+            selectedCoachLabel.setText("Aucun coach sélectionné");
+        if (challengesCountLabel != null)
+            challengesCountLabel.setText("0");
+        if (dateAjoutLabel != null)
+            dateAjoutLabel.setText("--/--/----");
+        if (successRateLabel != null)
+            successRateLabel.setText("--%");
     }
 
     private void goToChallenges() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ui/motivation/MainView.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) challengeBtn.getScene().getWindow();
@@ -683,7 +725,8 @@ public class CoachController implements Initializable {
 
     private void goToRecompenses() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RecompenseView.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/org/example/ui/motivation/RecompenseView.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) recBtn.getScene().getWindow();
@@ -698,10 +741,13 @@ public class CoachController implements Initializable {
         }
     }
 
-   /* private void exportToPDF() {
-        // À implémenter: exporter les coaches en PDF
-        showAlert("Export PDF", "Fonction d'export PDF à implémenter", Alert.AlertType.INFORMATION);
-    }*/
+    /*
+     * private void exportToPDF() {
+     * // À implémenter: exporter les coaches en PDF
+     * showAlert("Export PDF", "Fonction d'export PDF à implémenter",
+     * Alert.AlertType.INFORMATION);
+     * }
+     */
 
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
@@ -713,11 +759,16 @@ public class CoachController implements Initializable {
 
     private void updateStatistics() {
         if (coachList.isEmpty()) {
-            if (totalLabel != null) totalLabel.setText("0");
-            if (actifsLabel != null) actifsLabel.setText("0");
-            if (stylesLabel != null) stylesLabel.setText("0");
-            if (popularStyleLabel != null) popularStyleLabel.setText("Aucun");
-            if (engagementLabel != null) engagementLabel.setText("0%");
+            if (totalLabel != null)
+                totalLabel.setText("0");
+            if (actifsLabel != null)
+                actifsLabel.setText("0");
+            if (stylesLabel != null)
+                stylesLabel.setText("0");
+            if (popularStyleLabel != null)
+                popularStyleLabel.setText("Aucun");
+            if (engagementLabel != null)
+                engagementLabel.setText("0%");
             return;
         }
 
@@ -726,8 +777,10 @@ public class CoachController implements Initializable {
         long actifs = coachList.stream().filter(CoachMotivation::isActif).count();
 
         // Mise à jour des labels avec vérification null
-        if (totalLabel != null) totalLabel.setText(String.valueOf(total));
-        if (actifsLabel != null) actifsLabel.setText(String.valueOf(actifs));
+        if (totalLabel != null)
+            totalLabel.setText(String.valueOf(total));
+        if (actifsLabel != null)
+            actifsLabel.setText(String.valueOf(actifs));
 
         // Compter les styles uniques
         long uniqueStyles = coachList.stream()
@@ -735,7 +788,8 @@ public class CoachController implements Initializable {
                 .distinct()
                 .count();
 
-        if (stylesLabel != null) stylesLabel.setText(String.valueOf(uniqueStyles));
+        if (stylesLabel != null)
+            stylesLabel.setText(String.valueOf(uniqueStyles));
 
         // Calcul du taux d'engagement
         if (engagementLabel != null) {
@@ -747,7 +801,8 @@ public class CoachController implements Initializable {
 
     private void updateStyleStatistics(List<CoachMotivation> coaches) {
         if (coaches.isEmpty()) {
-            if (popularStyleLabel != null) popularStyleLabel.setText("Aucun");
+            if (popularStyleLabel != null)
+                popularStyleLabel.setText("Aucun");
             return;
         }
 
@@ -760,7 +815,8 @@ public class CoachController implements Initializable {
     }
 
     private void updateCoachStatistics(CoachMotivation coach) {
-        if (coach == null) return;
+        if (coach == null)
+            return;
 
         if (selectedCoachLabel != null) {
             selectedCoachLabel.setText(coach.getNomCoach());
@@ -795,9 +851,6 @@ public class CoachController implements Initializable {
                 Alert.AlertType.INFORMATION);
     }
 
-
-
-
     /* ================= EXPORT PDF ================= */
     /* ================= EXPORT PDF ================= */
     /* ================= EXPORT PDF ================= */
@@ -806,8 +859,7 @@ public class CoachController implements Initializable {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Exporter les coaches en PDF");
             fileChooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf")
-            );
+                    new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
 
             fileChooser.setInitialFileName("coaches_" +
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + ".pdf");
@@ -934,8 +986,8 @@ public class CoachController implements Initializable {
     }
 
     private void drawStatCard(PDPageContentStream contentStream, float x, float y,
-                              float width, float height, Color color,
-                              String label, String value, String unit) throws Exception {
+            float width, float height, Color color,
+            String label, String value, String unit) throws Exception {
         // Fond de la carte
         contentStream.setNonStrokingColor(color);
         contentStream.addRect(x, y, width, height);
@@ -1039,7 +1091,8 @@ public class CoachController implements Initializable {
         return y - 10;
     }
 
-    private float drawStatLine(PDPageContentStream contentStream, float y, String label, String value) throws Exception {
+    private float drawStatLine(PDPageContentStream contentStream, float y, String label, String value)
+            throws Exception {
         contentStream.beginText();
         contentStream.setNonStrokingColor(Color.BLACK);
         contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
@@ -1102,20 +1155,18 @@ public class CoachController implements Initializable {
     }
 
     private float drawCoachCard(PDPageContentStream contentStream, CoachMotivation coach,
-                                float y, float pageWidth) throws Exception {
+            float y, float pageWidth) throws Exception {
         float cardHeight = 200;
         float margin = 50;
         float cardWidth = pageWidth - 2 * margin;
 
-        Color cardColor = coach.isActif() ?
-                new Color(236, 240, 241) : new Color(250, 235, 235);
+        Color cardColor = coach.isActif() ? new Color(236, 240, 241) : new Color(250, 235, 235);
 
         contentStream.setNonStrokingColor(cardColor);
         contentStream.addRect(margin, y - cardHeight, cardWidth, cardHeight);
         contentStream.fill();
 
-        Color borderColor = coach.isActif() ?
-                new Color(46, 204, 113) : new Color(231, 76, 60);
+        Color borderColor = coach.isActif() ? new Color(46, 204, 113) : new Color(231, 76, 60);
 
         contentStream.setNonStrokingColor(borderColor);
         contentStream.addRect(margin, y - cardHeight, 10, cardHeight);
@@ -1196,7 +1247,7 @@ public class CoachController implements Initializable {
     }
 
     private void drawInfoItem(PDPageContentStream contentStream, float x, float y,
-                              String label, String value) throws Exception {
+            String label, String value) throws Exception {
         contentStream.beginText();
         contentStream.setNonStrokingColor(new Color(127, 140, 141));
         contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 10);
@@ -1214,7 +1265,8 @@ public class CoachController implements Initializable {
 
     // Methode utilitaire pour supprimer les accents
     private String removeAccents(String text) {
-        if (text == null) return "";
+        if (text == null)
+            return "";
 
         text = text.replace("\n", " ")
                 .replace("\r", " ");

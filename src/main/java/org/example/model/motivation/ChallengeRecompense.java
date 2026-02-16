@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.model.motivation;
 
 import java.sql.Timestamp;
 
@@ -27,10 +27,10 @@ public class ChallengeRecompense {
 
     // Constructeur complet (pour affichage)
     public ChallengeRecompense(int idChallenge, int idRecompense,
-                               String titreChallenge,
-                               String titreRecompense,
-                               String typeRecompense,
-                               Timestamp dateAttribution) {
+            String titreChallenge,
+            String titreRecompense,
+            String typeRecompense,
+            Timestamp dateAttribution) {
         this.idChallenge = idChallenge;
         this.idRecompense = idRecompense;
         this.titreChallenge = titreChallenge;

@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.controller.motivation;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -14,12 +14,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.example.dao.ChallengeCrud;
-import org.example.dao.CoachMotivationCrud;
-import org.example.dao.RecompenseCrud;
-import org.example.model.Challenge;
-import org.example.model.CoachMotivation;
-import org.example.model.Recompense;
+import org.example.dao.motivation.ChallengeCrud;
+import org.example.dao.motivation.CoachMotivationCrud;
+import org.example.dao.motivation.RecompenseCrud;
+import org.example.model.motivation.Challenge;
+import org.example.model.motivation.CoachMotivation;
+import org.example.model.motivation.Recompense;
+import org.example.util.Session;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -29,8 +30,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -39,30 +38,52 @@ import javafx.scene.layout.StackPane;
 
 public class DashboardStatistiquesController implements Initializable {
 
-    @FXML private Label totalChallengesLabel;
-    @FXML private Label actifsChallengesLabel;
-    @FXML private Label inactifsChallengesLabel;
-    @FXML private Label totalCoachsLabel;
-    @FXML private Label actifsCoachsLabel;
-    @FXML private Label specialisesCoachsLabel;
-    @FXML private Label totalRecompensesLabel;
-    @FXML private Label activesRecompensesLabel;
-    @FXML private Label typesRecompensesLabel;
-    @FXML private Label tauxActiviteLabel;
-    @FXML private Label dateActuelleLabel;
-    @FXML private Label heureActuelleLabel;
-    @FXML private Label derniereMajLabel;
-    @FXML private Label objectifMensuelLabel;
-    @FXML private Label progressionPourcentageLabel;
-    @FXML private Rectangle progressionBar;
+    @FXML
+    private Label totalChallengesLabel;
+    @FXML
+    private Label actifsChallengesLabel;
+    @FXML
+    private Label inactifsChallengesLabel;
+    @FXML
+    private Label totalCoachsLabel;
+    @FXML
+    private Label actifsCoachsLabel;
+    @FXML
+    private Label specialisesCoachsLabel;
+    @FXML
+    private Label totalRecompensesLabel;
+    @FXML
+    private Label activesRecompensesLabel;
+    @FXML
+    private Label typesRecompensesLabel;
+    @FXML
+    private Label tauxActiviteLabel;
+    @FXML
+    private Label dateActuelleLabel;
+    @FXML
+    private Label heureActuelleLabel;
+    @FXML
+    private Label derniereMajLabel;
+    @FXML
+    private Label objectifMensuelLabel;
+    @FXML
+    private Label progressionPourcentageLabel;
+    @FXML
+    private Rectangle progressionBar;
 
-    @FXML private PieChart difficultePieChart;
-    @FXML private PieChart typePieChart;
-    @FXML private BarChart<String, Number> recompensesBarChart;
+    @FXML
+    private PieChart difficultePieChart;
+    @FXML
+    private PieChart typePieChart;
+    @FXML
+    private BarChart<String, Number> recompensesBarChart;
 
-    @FXML private VBox topChallengesList;
-    @FXML private VBox topCoachsList;
-    @FXML private VBox topRecompensesList;
+    @FXML
+    private VBox topChallengesList;
+    @FXML
+    private VBox topCoachsList;
+    @FXML
+    private VBox topRecompensesList;
 
     @FXML
     private StackPane logoAccueil;
@@ -107,7 +128,8 @@ public class DashboardStatistiquesController implements Initializable {
         }
     }
 
-    private void mettreAJourKPIs(List<Challenge> challenges, List<CoachMotivation> coachs, List<Recompense> recompenses) {
+    private void mettreAJourKPIs(List<Challenge> challenges, List<CoachMotivation> coachs,
+            List<Recompense> recompenses) {
         // Challenges
         long totalChallenges = challenges.size();
         long actifsChallenges = challenges.stream().filter(Challenge::isActif).count();
@@ -167,15 +189,15 @@ public class DashboardStatistiquesController implements Initializable {
             progressionBar.setStyle("-fx-fill: linear-gradient(to right, #3498DB, #9B59B6);");
         }
     }
+
     private void mettreAJourGraphiques(List<Challenge> challenges, List<Recompense> recompenses) {
         // Graphique par difficulté
         ObservableList<PieChart.Data> difficulteData = FXCollections.observableArrayList();
         Map<String, Long> difficulteStats = challenges.stream()
                 .collect(Collectors.groupingBy(Challenge::getNiveauDifficulte, Collectors.counting()));
 
-        difficulteStats.forEach((difficulte, count) ->
-                difficulteData.add(new PieChart.Data(difficulte + " (" + count + ")", count))
-        );
+        difficulteStats.forEach(
+                (difficulte, count) -> difficulteData.add(new PieChart.Data(difficulte + " (" + count + ")", count)));
 
         if (difficulteData.isEmpty()) {
             difficulteData.add(new PieChart.Data("Aucune donnée", 1));
@@ -187,9 +209,7 @@ public class DashboardStatistiquesController implements Initializable {
         Map<String, Long> typeStats = challenges.stream()
                 .collect(Collectors.groupingBy(Challenge::getTypeChallenge, Collectors.counting()));
 
-        typeStats.forEach((type, count) ->
-                typeData.add(new PieChart.Data(type + " (" + count + ")", count))
-        );
+        typeStats.forEach((type, count) -> typeData.add(new PieChart.Data(type + " (" + count + ")", count)));
 
         if (typeData.isEmpty()) {
             typeData.add(new PieChart.Data("Aucune donnée", 1));
@@ -203,9 +223,7 @@ public class DashboardStatistiquesController implements Initializable {
         Map<String, Long> recompensesStats = recompenses.stream()
                 .collect(Collectors.groupingBy(Recompense::getTypeRecompense, Collectors.counting()));
 
-        recompensesStats.forEach((type, count) ->
-                series.getData().add(new XYChart.Data<>(type, count))
-        );
+        recompensesStats.forEach((type, count) -> series.getData().add(new XYChart.Data<>(type, count)));
 
         recompensesBarChart.getData().clear();
         if (!series.getData().isEmpty()) {
@@ -213,7 +231,8 @@ public class DashboardStatistiquesController implements Initializable {
         }
     }
 
-    private void mettreAJourTopListes(List<Challenge> challenges, List<CoachMotivation> coachs, List<Recompense> recompenses) {
+    private void mettreAJourTopListes(List<Challenge> challenges, List<CoachMotivation> coachs,
+            List<Recompense> recompenses) {
         // Top 5 challenges (par durée)
         topChallengesList.getChildren().clear();
         challenges.stream()
@@ -279,42 +298,49 @@ public class DashboardStatistiquesController implements Initializable {
         chargerStatistiques();
     }
 
-
-
     @FXML
     private void retournerVersChallenges() {
         try {
-            // Charger le fichier FXML de la page des challenges
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView.fxml"));
+            String fxmlPath;
+            String title;
+
+            if (Session.isAdmin()) {
+                fxmlPath = "/org/example/ui/gestion.fxml";
+                title = "Administration";
+            } else {
+                // If User, going "Back" from Dashboard (if they ever get there) should go to
+                // MainView?
+                // Or maybe Home?
+                // Wait, User goes to MainView FIRST. MainView has Dashboard button.
+                // So Dashboard Back -> MainView.
+                fxmlPath = "/org/example/ui/motivation/MainView.fxml";
+                title = "Challenges";
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            // Obtenir la scène actuelle
             Stage stage = (Stage) logoAccueil.getScene().getWindow();
-
-            // Changer de scène
             stage.setScene(new Scene(root));
-            stage.setTitle("Challenge Manager Pro");
+            stage.setTitle(title);
             stage.centerOnScreen();
 
-            // Animation de transition (optionnelle)
             javafx.animation.FadeTransition fade = new javafx.animation.FadeTransition(
-                    javafx.util.Duration.millis(300), root
-            );
+                    javafx.util.Duration.millis(300), root);
             fade.setFromValue(0);
             fade.setToValue(1);
             fade.play();
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Erreur de navigation", "Impossible de retourner à la page des challenges");
+            showError("Erreur de navigation", "Impossible de retourner à la page précédente");
         }
     }
 
     // Ajoutez aussi cette méthode utilitaire si elle n'existe pas déjà
     private void showError(String title, String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
-                javafx.scene.control.Alert.AlertType.ERROR
-        );
+                javafx.scene.control.Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

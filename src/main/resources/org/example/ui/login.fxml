@@ -65,8 +65,7 @@
                                               -fx-padding: 12;"/>
                     </VBox>
 
-                    <Button text="Se connecter"
-                            onAction="#onLogin"
+                    <Button fx:id="loginButton" text="Se connecter"
                             maxWidth="Infinity"
                             style="-fx-background-radius: 25;
                                    -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);
