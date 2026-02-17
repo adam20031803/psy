@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controller.fitness.FitnessDashboardController"
+            stylesheets="@styles.css"
+            style="-fx-background-color: linear-gradient(to bottom right, #0a0820, #1a1535, #0f0c29, #302b63);">
+
+    <top>
+        <VBox spacing="0">
+            <!-- Enhanced Header -->
+            <HBox alignment="CENTER_LEFT" style="-fx-background-color: rgba(255,255,255,0.05); -fx-padding: 24 40; -fx-border-color: rgba(0,255,198,0.15); -fx-border-width: 0 0 1 0;">
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <!-- Logo with gradient glow -->
+                    <StackPane>
+                        <Circle radius="28" style="-fx-fill: radial-gradient(center 50% 50%, radius 100%, #00ffc6, #00c9a7); -fx-effect: dropshadow(gaussian, rgba(0,255,198,0.6), 20, 0, 0, 0);"/>
+                        <Label text="⚡" style="-fx-font-size: 22px;"/>
+                    </StackPane>
+                    <VBox spacing="4">
+                        <Label text="FITNESS HUB" 
+                               style="-fx-font-size: 28px; -fx-font-weight: 900; -fx-text-fill: white; -fx-font-family: 'Segoe UI'; -fx-letter-spacing: 1px;"/>
+                        <Label text="Build Atomic Habits • Transform Daily" 
+                               style="-fx-font-size: 12.5px; -fx-text-fill: #00ffc6; -fx-font-family: 'Segoe UI'; -fx-font-weight: 500;"/>
+                    </VBox>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox spacing="14">
+                    <Button fx:id="homeBtn" text="🏠 MAIN MENU"
+                            style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-font-weight: 700; -fx-background-radius: 28; -fx-padding: 12 20; -fx-cursor: hand; -fx-border-color: rgba(255,255,255,0.2); -fx-border-radius: 28; -fx-border-width: 1.5; -fx-font-size: 11px;"/>
+                    <Button fx:id="refreshBtn" text="🔃 Refresh"
+                            style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-font-weight: 700; -fx-background-radius: 28; -fx-padding: 12 26; -fx-cursor: hand; -fx-border-color: rgba(255,255,255,0.2); -fx-border-radius: 28; -fx-border-width: 1.5; -fx-font-size: 12.5px;"/>
+                    <Button fx:id="myPlanBtn" text="📅 MY PLAN"
+                            style="-fx-background-color: linear-gradient(to bottom right, #00c9a7 0%, #00ffc6 100%); -fx-text-fill: white; -fx-font-weight: 800; -fx-font-size: 12.5px; -fx-background-radius: 28; -fx-padding: 12 24; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,201,167,0.6), 15, 0, 0, 4);"/>
+                    <Button fx:id="historyBtn" text="📊 HISTORY"
+                            style="-fx-background-color: linear-gradient(to bottom right, #6780ff 0%, #5678e9 100%); -fx-text-fill: white; -fx-font-weight: 800; -fx-font-size: 12.5px; -fx-background-radius: 28; -fx-padding: 12 24; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(103,128,255,0.6), 15, 0, 0, 4);"/>
+                    
+                    <Region prefWidth="20" /> <!-- Spacer between Client and Admin tools -->
+
+                    <Button fx:id="manageWorkoutsBtn" text="🛠️ MANAGE WORKOUTS"
+                            style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-font-weight: 700; -fx-font-size: 12.5px; -fx-background-radius: 28; -fx-padding: 12 28; -fx-cursor: hand; -fx-border-color: rgba(103,128,255,0.5); -fx-border-width: 1.5;"/>
+                    <Button fx:id="coachBtn" text="🎯 COACH PANEL"
+                            style="-fx-background-color: linear-gradient(to bottom right, #ff8e53 0%, #ff6b6b 100%); -fx-text-fill: white; -fx-font-weight: 800; -fx-font-size: 12.5px; -fx-background-radius: 28; -fx-padding: 12 24; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(255,142,83,0.6), 15, 0, 0, 4);"/>
+                </HBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background-insets: 0;">
+            <VBox spacing="32" style="-fx-padding: 35;">
+                <!-- Enhanced Stats Grid -->
+                <GridPane hgap="28" vgap="28">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="33.33"/>
+                        <ColumnConstraints percentWidth="33.33"/>
+                        <ColumnConstraints percentWidth="33.34"/>
+                    </columnConstraints>
+                    
+                    <!-- Streak Card - Enhanced -->
+                    <StackPane GridPane.columnIndex="0">
+                        <VBox spacing="14" alignment="CENTER"
+                              style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 24; -fx-padding: 36 28; -fx-border-color: linear-gradient(to bottom, rgba(255,107,107,0.6), rgba(255,82,82,0.3)); -fx-border-width: 2; -fx-border-radius: 24; -fx-effect: dropshadow(gaussian, rgba(255,82,82,0.3), 25, 0, 0, 8);">
+                            <StackPane>
+                                <Circle radius="35" style="-fx-fill: radial-gradient(center 50% 50%, radius 100%, #ff6b6b, #ff5252); -fx-effect: dropshadow(gaussian, rgba(255,107,107,0.7), 20, 0, 0, 0);"/>
+                                <Label text="🔥" style="-fx-font-size: 26px;"/>
+                            </StackPane>
+                            <Label text="CURRENT STREAK" 
+                                   style="-fx-font-size: 11px; -fx-font-weight: 800; -fx-text-fill: #ffa5a5; -fx-letter-spacing: 1.5px;"/>
+                            <Label fx:id="streakLabel" text="0" 
+                                   style="-fx-font-size: 52px; -fx-font-weight: 900; -fx-text-fill: #ff6b6b; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(gaussian, rgba(255,107,107,0.5), 10, 0, 0, 0);"/>
+                            <Label text="consecutive days" 
+                                   style="-fx-font-size: 11.5px; -fx-text-fill: rgba(255,255,255,0.6); -fx-font-weight: 500;"/>
+                        </VBox>
+                    </StackPane>
+                    
+                    <!-- Weekly Progress Card - Enhanced -->
+                    <StackPane GridPane.columnIndex="1">
+                        <VBox spacing="14" alignment="CENTER"
+                              style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 24; -fx-padding: 36 28; -fx-border-color: linear-gradient(to bottom, rgba(0,201,167,0.6), rgba(0,212,177,0.3)); -fx-border-width: 2; -fx-border-radius: 24; -fx-effect: dropshadow(gaussian, rgba(0,201,167,0.3), 25, 0, 0, 8);">
+                            <StackPane>
+                                <Circle radius="35" style="-fx-fill: radial-gradient(center 50% 50%, radius 100%, #00c9a7, #00ffc6); -fx-effect: dropshadow(gaussian, rgba(0,201,167,0.7), 20, 0, 0, 0);"/>
+                                <Label text="📈" style="-fx-font-size: 26px;"/>
+                            </StackPane>
+                            <Label text="WEEKLY COMPLETION" 
+                                   style="-fx-font-size: 11px; -fx-font-weight: 800; -fx-text-fill: #00ffc6; -fx-letter-spacing: 1.5px;"/>
+                            <Label fx:id="weeklyPercentLabel" text="0%" 
+                                   style="-fx-font-size: 38px; -fx-font-weight: 900; -fx-text-fill: white; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(gaussian, rgba(0,255,198,0.3), 10, 0, 0, 0);"/>
+                            <ProgressBar fx:id="weeklyProgressBar" progress="0" prefWidth="240" prefHeight="18"
+                                       style="-fx-background-radius: 10;"/>
+                        </VBox>
+                    </StackPane>
+                    
+                    <!-- Total Workouts Card - New -->
+                    <StackPane GridPane.columnIndex="2">
+                        <VBox spacing="14" alignment="CENTER"
+                              style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 24; -fx-padding: 36 28; -fx-border-color: linear-gradient(to bottom, rgba(103,128,255,0.6), rgba(86,120,233,0.3)); -fx-border-width: 2; -fx-border-radius: 24; -fx-effect: dropshadow(gaussian, rgba(103,128,255,0.3), 25, 0, 0, 8);">
+                            <StackPane>
+                                <Circle radius="35" style="-fx-fill: radial-gradient(center 50% 50%, radius 100%, #6780ff, #5678e9); -fx-effect: dropshadow(gaussian, rgba(103,128,255,0.7), 20, 0, 0, 0);"/>
+                                <Label text="🏆" style="-fx-font-size: 26px;"/>
+                            </StackPane>
+                            <Label text="TOTAL SESSIONS" 
+                                   style="-fx-font-size: 11px; -fx-font-weight: 800; -fx-text-fill: #a5b4ff; -fx-letter-spacing: 1.5px;"/>
+                            <Label fx:id="totalWorkoutsLabel" text="0" 
+                                   style="-fx-font-size: 52px; -fx-font-weight: 900; -fx-text-fill: #6780ff; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(gaussian, rgba(103,128,255,0.5), 10, 0, 0, 0);"/>
+                            <Label text="workouts completed" 
+                                   style="-fx-font-size: 11.5px; -fx-text-fill: rgba(255,255,255,0.6); -fx-font-weight: 500;"/>
+                        </VBox>
+                    </StackPane>
+                </GridPane>
+                
+                <!-- Motivational Quote Section - New -->
+                <HBox alignment="CENTER" style="-fx-background-color: linear-gradient(to bottom right, rgba(0,201,167,0.15), rgba(103,128,255,0.15)); -fx-background-radius: 20; -fx-padding: 24 32; -fx-border-color: rgba(0,255,198,0.25); -fx-border-width: 1.5; -fx-border-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 5);">
+                    <Label text="💎" style="-fx-font-size: 20px; -fx-padding: 0 15 0 0;"/>
+                    <Label text="&quot;The secret of getting ahead is getting started.&quot; - Mark Twain"
+                           style="-fx-font-size: 15px; -fx-text-fill: white; -fx-font-style: italic; -fx-font-weight: 500;"/>
+                </HBox>
+                
+                <!-- Workouts Section - Enhanced -->
+                <VBox spacing="18">
+                    <HBox alignment="CENTER_LEFT" spacing="14" style="-fx-padding: 0 8;">
+                        <StackPane>
+                            <Circle radius="24" style="-fx-fill: linear-gradient(to bottom right, #00c9a7, #00ffc6); -fx-effect: dropshadow(gaussian, rgba(0,255,198,0.4), 10, 0, 0, 0);"/>
+                            <Label text="⚡" style="-fx-font-size: 16px;"/>
+                        </StackPane>
+                        <VBox spacing="3">
+                            <Label text="TODAY'S WORKOUTS" 
+                                   style="-fx-font-size: 22px; -fx-font-weight: 900; -fx-text-fill: white; -fx-letter-spacing: 0.5px;"/>
+                            <Label text="Complete your daily routine"
+                                   style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.5);"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <HBox spacing="10" alignment="CENTER" style="-fx-background-color: linear-gradient(to bottom right, rgba(0,201,167,0.2), rgba(0,255,198,0.15)); -fx-background-radius: 20; -fx-padding: 10 20; -fx-border-color: rgba(0,255,198,0.3); -fx-border-width: 1; -fx-border-radius: 20;">
+                            <Label text="✅" style="-fx-font-size: 14px;"/>
+                            <Label text="Mark completed to build your streak"
+                                   style="-fx-font-size: 12.5px; -fx-text-fill: #00ffc6; -fx-font-weight: 600;"/>
+                        </HBox>
+                        <Button fx:id="quickAddBtn" text="+ QUICK ADD"
+                                style="-fx-background-color: linear-gradient(to bottom right, #ff6b6b, #ff8e53); -fx-text-fill: white; -fx-font-weight: 800; -fx-font-size: 12px; -fx-background-radius: 25; -fx-padding: 10 22; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(255,107,107,0.5), 12, 0, 0, 4);"/>
+                    </HBox>
+                    
+                    <!-- Workout Cards Container -->
+                    <VBox fx:id="workoutCardsContainer" spacing="18" style="-fx-padding: 8 0;"/>
+                    
+                    <!-- Empty State - Enhanced -->
+                    <VBox fx:id="emptyStateContainer" spacing="16" alignment="CENTER" style="-fx-padding: 60 0; -fx-background-color: rgba(255,255,255,0.04); -fx-background-radius: 20; -fx-border-color: rgba(255,255,255,0.1); -fx-border-width: 1; -fx-border-radius: 20; -fx-border-style: dashed;">
+                        <StackPane>
+                            <Circle radius="40" style="-fx-fill: rgba(0,201,167,0.15); -fx-effect: dropshadow(gaussian, rgba(0,255,198,0.3), 15, 0, 0, 0);"/>
+                            <Label text="🚀" style="-fx-font-size: 36px;"/>
+                        </StackPane>
+                        <Label text="No workouts scheduled for today"
+                               style="-fx-font-size: 18px; -fx-text-fill: rgba(255,255,255,0.7); -fx-font-weight: 600;"/>
+                        <Label text="Click '+ QUICK ADD' or 'MANAGE WORKOUTS' to create your first workout"
+                               style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.4);"/>
+                        <Button text="💪 GET STARTED"
+                                style="-fx-background-color: linear-gradient(to bottom right, #00c9a7, #00ffc6); -fx-text-fill: #0a0820; -fx-font-weight: 800; -fx-font-size: 13px; -fx-background-radius: 25; -fx-padding: 12 32; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,255,198,0.5), 15, 0, 0, 5);"/>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="8" style="-fx-background-color: rgba(0,0,0,0.4); -fx-padding: 14; -fx-border-color: rgba(0,255,198,0.1); -fx-border-width: 1 0 0 0;">
+            <Label text="🌟" style="-fx-font-size: 12px; -fx-text-fill: #00ffc6;"/>
+            <Label text="Fitness Hub v2.0 • Atomic Habits System"
+                   style="-fx-font-size: 11px; -fx-text-fill: rgba(255,255,255,0.4); -fx-font-weight: 500;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

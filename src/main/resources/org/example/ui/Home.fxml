@@ -2,68 +2,134 @@
 
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.effect.DropShadow?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.example.controller.HomeController"
-            style="-fx-background-color: linear-gradient(to bottom right, #1e3c72, #2a5298);">
+            style="-fx-background-color: #0f0c29;">
 
-    <!-- TOP BAR -->
     <top>
-        <HBox spacing="20"
-              alignment="CENTER_LEFT"
-              style="-fx-padding: 20;
-                     -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);">
-
-            <Label text="Tableau de bord"
-                   style="-fx-text-fill: white;
-                          -fx-font-size: 24px;
-                          -fx-font-weight: bold;"/>
-
+        <HBox spacing="20" alignment="CENTER_LEFT" 
+              style="-fx-padding: 25; -fx-background-color: linear-gradient(to right, #24243e, #302b63, #0f0c29);">
+            
+            <VBox spacing="2">
+                <Label text="ATOMIC YOU" 
+                       style="-fx-text-fill: #00ffc6; -fx-font-size: 26px; -fx-font-weight: 900; -fx-letter-spacing: 2px;"/>
+                <Label text="VOTRE BIEN-ÊTRE AU QUOTIDIEN" 
+                       style="-fx-text-fill: rgba(255,255,255,0.6); -fx-font-size: 10px; -fx-font-weight: bold; -fx-letter-spacing: 1px;"/>
+            </VBox>
+            
             <Region HBox.hgrow="ALWAYS"/>
-
-            <Button text="Déconnexion"
+            
+            <Button text="DÉCONNEXION" 
                     onAction="#onLogout"
-                    style="-fx-background-radius: 25;
-                           -fx-background-color: #00c6ff;
-                           -fx-text-fill: white;
-                           -fx-font-weight: bold;
-                           -fx-padding: 8 20;"/>
+                    style="-fx-background-radius: 30; -fx-background-color: rgba(255,255,255,0.1); 
+                           -fx-text-fill: white; -fx-font-weight: 800; -fx-padding: 10 25; 
+                           -fx-border-color: rgba(255,255,255,0.3); -fx-border-width: 1; -fx-border-radius: 30; -fx-cursor: hand;"/>
         </HBox>
     </top>
 
-    <!-- CENTER CONTENT -->
     <center>
-        <VBox spacing="30"
-              alignment="CENTER"
-              style="-fx-padding: 40;">
-
-            <!-- Card container -->
-            <VBox spacing="25"
-                  alignment="CENTER"
-                  maxWidth="500"
-                  style="-fx-background-color: white;
-                         -fx-background-radius: 20;
-                         -fx-padding: 40;
-                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 25,0,0,8);">
-
-                <Label text="Bienvenue sur ATOMIC YOU"
-                       style="-fx-font-size: 20px;
-                              -fx-font-weight: bold;
-                              -fx-text-fill: #333;"/>
-
-                <Button text="Faire une réclamation"
-                        onAction="#onGoToCreateReclamation"
-                        maxWidth="Infinity"
-                        style="-fx-background-radius: 25;
-                               -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);
-                               -fx-text-fill: white;
-                               -fx-font-weight: bold;
-                               -fx-padding: 12 25;"/>
-
+        <VBox spacing="40" alignment="CENTER" style="-fx-padding: 40;">
+            
+            <VBox alignment="CENTER" spacing="10">
+                <Label text="Bienvenue dans votre espace personnel" 
+                       style="-fx-text-fill: white; -fx-font-size: 32px; -fx-font-weight: 800;"/>
+                <Label text="Que souhaitez-vous accomplir aujourd'hui ?" 
+                       style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 16px;"/>
             </VBox>
 
+            <HBox spacing="40" alignment="CENTER">
+                
+                <!-- FITNESS CARD -->
+                <VBox spacing="20" alignment="CENTER" prefWidth="320"
+                      style="-fx-background-color: rgba(255,255,255,0.05); -fx-background-radius: 25; 
+                             -fx-padding: 35; -fx-border-color: rgba(0,255,198,0.3); -fx-border-width: 2; -fx-border-radius: 25;">
+                    <effect>
+                        <DropShadow color="rgba(0,255,198,0.2)" radius="30" spread="0.1"/>
+                    </effect>
+                    
+                    <Label text="🏋️" style="-fx-font-size: 60px;"/>
+                    
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="FITNESS &amp; HABIT" 
+                               style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: 800;"/>
+                        <Label text="Suivez vos progrès et restez motivé" 
+                               style="-fx-text-fill: rgba(255,255,255,0.6); -fx-font-size: 13px; -fx-text-alignment: center;"/>
+                    </VBox>
+                    
+                    <Button text="COMMENCER" 
+                            onAction="#onGoToFitness"
+                            maxWidth="Infinity"
+                            style="-fx-background-radius: 30; 
+                                   -fx-background-color: linear-gradient(to right, #00c9a7, #00ffc6); 
+                                   -fx-text-fill: #0f0c29; -fx-font-weight: 800; -fx-padding: 15 30; -fx-cursor: hand;"/>
+                </VBox>
+
+                <!-- MOTIVATION CARD -->
+                <VBox spacing="20" alignment="CENTER" prefWidth="320"
+                      style="-fx-background-color: rgba(255,255,255,0.05); -fx-background-radius: 25; 
+                             -fx-padding: 35; -fx-border-color: rgba(253,187,45,0.3); -fx-border-width: 2; -fx-border-radius: 25;">
+                    <effect>
+                        <DropShadow color="rgba(253,187,45,0.2)" radius="30" spread="0.1"/>
+                    </effect>
+
+                    <Label text="🎯" style="-fx-font-size: 60px;"/>
+
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="MOTIVATION" 
+                               style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: 800;"/>
+                        <Label text="Challenges, coachs et récompenses" 
+                               style="-fx-text-fill: rgba(255,255,255,0.6); -fx-font-size: 13px; -fx-text-alignment: center;"/>
+                    </VBox>
+
+                    <Button text="VOIR LES STATS" 
+                            onAction="#onGoToMotivation"
+                            maxWidth="Infinity"
+                            style="-fx-background-radius: 30; 
+                                   -fx-background-color: linear-gradient(to right, #fdbb2d, #b21f1f); 
+                                   -fx-text-fill: white; -fx-font-weight: 800; -fx-padding: 15 30; -fx-cursor: hand;"/>
+                </VBox>
+
+                <!-- RECLAMATION CARD -->
+                <VBox spacing="20" alignment="CENTER" prefWidth="320"
+                      style="-fx-background-color: rgba(255,255,255,0.05); -fx-background-radius: 25; 
+                             -fx-padding: 35; -fx-border-color: rgba(106,17,203,0.3); -fx-border-width: 2; -fx-border-radius: 25;">
+                    <effect>
+                        <DropShadow color="rgba(106,17,203,0.2)" radius="30" spread="0.1"/>
+                    </effect>
+
+                    <Label text="✉️" style="-fx-font-size: 60px;"/>
+
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="RÉCLAMATIONS" 
+                               style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: 800;"/>
+                        <Label text="Nous sommes à votre écoute" 
+                               style="-fx-text-fill: rgba(255,255,255,0.6); -fx-font-size: 13px; -fx-text-alignment: center;"/>
+                    </VBox>
+
+                    <Button text="NOUS CONTACTER" 
+                            onAction="#onGoToCreateReclamation"
+                            maxWidth="Infinity"
+                            style="-fx-background-radius: 30; 
+                                   -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc); 
+                                   -fx-text-fill: white; -fx-font-weight: 800; -fx-padding: 15 30; -fx-cursor: hand;"/>
+                </VBox>
+
+            </HBox>
+            
         </VBox>
     </center>
 
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-padding: 20;">
+            <Label text="© 2026 ATOMIC YOU - DÉVELOPPÉ AVEC PASSION" 
+                   style="-fx-text-fill: rgba(255,255,255,0.3); -fx-font-size: 10px; -fx-font-weight: bold;"/>
+        </HBox>
+    </bottom>
+
 </BorderPane>
+

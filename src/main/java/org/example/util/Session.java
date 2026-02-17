@@ -23,6 +23,10 @@ public class Session {
         return "ADMIN".equalsIgnoreCase(role);
     }
 
+    public static boolean isCoach() {
+        return "COACH".equalsIgnoreCase(role) || "ADMIN".equalsIgnoreCase(role);
+    }
+
     public static void clear() {
         userId = 0;
         role = null;
