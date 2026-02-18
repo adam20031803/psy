@@ -1,4 +1,4 @@
-package org.example.ui;
+package org.example.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,30 +19,34 @@ import java.util.regex.Pattern;
 
 public class RegisterController {
 
-    @FXML private TextField nomField;
-    @FXML private TextField prenomField;
-    @FXML private TextField ageField;
-    @FXML private TextField telField;
-    @FXML private TextField emailField;
-    @FXML private PasswordField pwdField;
-    @FXML private PasswordField confirmPwdField;
-    @FXML private ComboBox<String> roleBox;
-    @FXML private Label messageLabel;
+    @FXML
+    private TextField nomField;
+    @FXML
+    private TextField prenomField;
+    @FXML
+    private TextField ageField;
+    @FXML
+    private TextField telField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private PasswordField pwdField;
+    @FXML
+    private PasswordField confirmPwdField;
+    @FXML
+    private ComboBox<String> roleBox;
+    @FXML
+    private Label messageLabel;
 
-    private static final String DB_URL =
-            "jdbc:mysql://localhost:3306/psy?useSSL=false&serverTimezone=UTC";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/psy?useSSL=false&serverTimezone=UTC";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "";
 
     // ✅ Regex / Patterns
-    private static final Pattern NAME_PATTERN =
-            Pattern.compile("^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\\s'\\-]{1,29}$"); // 2..30
-    private static final Pattern EMAIL_PATTERN =
-            Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
-    private static final Pattern PHONE_TN_PATTERN =
-            Pattern.compile("^\\d{8}$"); // Tunisie
-    private static final Pattern STRONG_PWD_PATTERN =
-            Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$");
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\\s'\\-]{1,29}$"); // 2..30
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    private static final Pattern PHONE_TN_PATTERN = Pattern.compile("^\\d{8}$"); // Tunisie
+    private static final Pattern STRONG_PWD_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$");
 
     @FXML
     public void initialize() {
@@ -72,14 +76,14 @@ public class RegisterController {
         // Reset style message (à chaque tentative)
         setMsg("", false);
 
-        String nom     = safe(nomField.getText());
-        String prenom  = safe(prenomField.getText());
-        String ageStr  = safe(ageField.getText());
-        String tel     = safe(telField.getText());
-        String email   = safe(emailField.getText()).toLowerCase();
-        String pwd     = safe(pwdField.getText());
+        String nom = safe(nomField.getText());
+        String prenom = safe(prenomField.getText());
+        String ageStr = safe(ageField.getText());
+        String tel = safe(telField.getText());
+        String email = safe(emailField.getText()).toLowerCase();
+        String pwd = safe(pwdField.getText());
         String confirm = safe(confirmPwdField.getText());
-        String role    = roleBox.getValue();
+        String role = roleBox.getValue();
 
         // 1) champs vides
         if (nom.isEmpty() || prenom.isEmpty() || ageStr.isEmpty() ||
@@ -116,7 +120,8 @@ public class RegisterController {
         }
 
         // 4) téléphone
-        // 👉 ici je valide TN 8 chiffres. Si tu veux accepter +216xxxxxxxx aussi, dis-moi.
+        // 👉 ici je valide TN 8 chiffres. Si tu veux accepter +216xxxxxxxx aussi,
+        // dis-moi.
         if (!PHONE_TN_PATTERN.matcher(tel).matches()) {
             setMsg("Téléphone invalide (8 chiffres).", false);
             telField.requestFocus();
@@ -156,12 +161,12 @@ public class RegisterController {
             String hash = sha256(pwd);
 
             String sql = """
-                INSERT INTO `user` (nom, prenom, age, tel, email, pwd, role)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            """;
+                        INSERT INTO `user` (nom, prenom, age, tel, email, pwd, role)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                    """;
 
             try (Connection cn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-                 PreparedStatement ps = cn.prepareStatement(sql)) {
+                    PreparedStatement ps = cn.prepareStatement(sql)) {
 
                 ps.setString(1, nom);
                 ps.setString(2, prenom);
@@ -228,13 +233,14 @@ public class RegisterController {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] digest = md.digest(input.getBytes(StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();
-        for (byte b : digest) sb.append(String.format("%02x", b));
+        for (byte b : digest)
+            sb.append(String.format("%02x", b));
         return sb.toString();
     }
 
     private void setMaxLen(TextField tf, int max) {
-        tf.setTextFormatter(new TextFormatter<String>((TextFormatter.Change c) ->
-                c.getControlNewText().length() <= max ? c : null));
+        tf.setTextFormatter(new TextFormatter<String>(
+                (TextFormatter.Change c) -> c.getControlNewText().length() <= max ? c : null));
     }
 
     private TextFormatter<String> digitsOnlyMaxLen(int maxLen) {
@@ -249,9 +255,12 @@ public class RegisterController {
         UnaryOperator<TextFormatter.Change> filter = c -> {
             String t = c.getControlNewText();
             // autorise: "" ou "+" au début puis chiffres, max 15
-            if (t.isEmpty()) return c;
-            if (t.length() > 15) return null;
-            if (t.startsWith("+")) return t.substring(1).matches("\\d*") ? c : null;
+            if (t.isEmpty())
+                return c;
+            if (t.length() > 15)
+                return null;
+            if (t.startsWith("+"))
+                return t.substring(1).matches("\\d*") ? c : null;
             return t.matches("\\d*") ? c : null;
         };
         return new TextFormatter<>(filter);
@@ -260,7 +269,8 @@ public class RegisterController {
     private TextFormatter<String> noSpacesMaxLen(int maxLen) {
         UnaryOperator<TextFormatter.Change> filter = c -> {
             String t = c.getControlNewText();
-            if (t.length() > maxLen) return null;
+            if (t.length() > maxLen)
+                return null;
             return t.contains(" ") ? null : c;
         };
         return new TextFormatter<>(filter);

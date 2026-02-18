@@ -1,6 +1,6 @@
-package org.example.dao;
+package org.example.dao.motivation;
 
-import org.example.model.Challenge;
+import org.example.model.motivation.Challenge;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +14,8 @@ public class ChallengeCrud implements Crud_challenge<Challenge> {
     @Override
 
     public void create(Challenge challenge) {
-        String query = "INSERT INTO challenge (titre, description, duree_jours, niveau_difficulte, type_challenge, actif) " +
+        String query = "INSERT INTO challenge (titre, description, duree_jours, niveau_difficulte, type_challenge, actif) "
+                +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
@@ -35,7 +36,6 @@ public class ChallengeCrud implements Crud_challenge<Challenge> {
         }
     }
 
-
     // READ
     @Override
     public List<Challenge> readAll() {
@@ -43,7 +43,7 @@ public class ChallengeCrud implements Crud_challenge<Challenge> {
         String sql = "SELECT * FROM challenge ";
 
         try (Statement st = cnx.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+                ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
                 Challenge c = new Challenge();
@@ -87,7 +87,7 @@ public class ChallengeCrud implements Crud_challenge<Challenge> {
         String sql = "UPDATE challenge SET actif = 0 WHERE id_challenge = ?";
         try (PreparedStatement ps = cnx.prepareStatement(sql)) {
             ps.setInt(1, id);
-            int rowsAffected = ps.executeUpdate();  // executeUpdate renvoie le nombre de lignes modifiées
+            int rowsAffected = ps.executeUpdate(); // executeUpdate renvoie le nombre de lignes modifiées
             if (rowsAffected > 0) {
                 System.out.println("Challenge avec ID " + id + " supprimé (soft delete).");
             } else {
@@ -98,7 +98,6 @@ public class ChallengeCrud implements Crud_challenge<Challenge> {
             e.printStackTrace();
         }
     }
-
 
     public void delete_reel(int id) {
         String sql = "DELETE FROM challenge WHERE id_challenge = ?";

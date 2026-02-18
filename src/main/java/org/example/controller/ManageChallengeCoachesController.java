@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,16 +17,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.example.dao.ChallengeCoachCrud;
-import org.example.dao.ChallengeCrud;
-import org.example.dao.CoachMotivationCrud;
-import org.example.model.CoachMotivation;
-import org.example.model.Challenge;
+import org.example.dao.motivation.ChallengeCoachCrud;
+import org.example.dao.motivation.ChallengeCrud;
+import org.example.dao.motivation.CoachMotivationCrud;
+import org.example.model.motivation.CoachMotivation;
+import org.example.model.motivation.Challenge;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+
 public class ManageChallengeCoachesController implements Initializable {
 
     @FXML
@@ -55,7 +56,7 @@ public class ManageChallengeCoachesController implements Initializable {
 
     private final ObservableList<Challenge> challengeList = FXCollections.observableArrayList();
     private final ChallengeCoachCrud challengeCoachCrud = new ChallengeCoachCrud();
-    private final org.example.dao.ChallengeCrud challengeCrud = new org.example.dao.ChallengeCrud();
+    private final ChallengeCrud challengeCrud = new ChallengeCrud();
     private final CoachMotivationCrud coachCrud = new CoachMotivationCrud();
 
     @Override
@@ -108,8 +109,7 @@ public class ManageChallengeCoachesController implements Initializable {
                                 "-fx-text-fill: white; " +
                                 "-fx-font-weight: bold; " +
                                 "-fx-padding: 5 10; " +
-                                "-fx-cursor: hand;"
-                );
+                                "-fx-cursor: hand;");
                 manageButton.setOnAction(event -> {
                     Challenge challenge = getTableView().getItems().get(getIndex());
                     openCoachManager(challenge);
@@ -120,8 +120,7 @@ public class ManageChallengeCoachesController implements Initializable {
                                 "-fx-text-fill: white; " +
                                 "-fx-font-weight: bold; " +
                                 "-fx-padding: 5 10; " +
-                                "-fx-cursor: hand;"
-                );
+                                "-fx-cursor: hand;");
                 detailsButton.setOnAction(event -> {
                     Challenge challenge = getTableView().getItems().get(getIndex());
                     showChallengeDetails(challenge);
@@ -185,13 +184,10 @@ public class ManageChallengeCoachesController implements Initializable {
 
         challengeList.setAll(
                 challengeCrud.readAll().stream()
-                        .filter(c ->
-                                c.getTitre().toLowerCase().contains(keyword) ||
-                                        c.getDescription().toLowerCase().contains(keyword) ||
-                                        c.getTypeChallenge().toLowerCase().contains(keyword)
-                        )
-                        .collect(Collectors.toList())
-        );
+                        .filter(c -> c.getTitre().toLowerCase().contains(keyword) ||
+                                c.getDescription().toLowerCase().contains(keyword) ||
+                                c.getTypeChallenge().toLowerCase().contains(keyword))
+                        .collect(Collectors.toList()));
         updateStatistics();
     }
 
@@ -211,10 +207,8 @@ public class ManageChallengeCoachesController implements Initializable {
 
             // Liste des coaches actuels
             ListView<CoachMotivation> currentList = new ListView<>();
-            ObservableList<CoachMotivation> currentCoaches =
-                    FXCollections.observableArrayList(
-                            challengeCoachCrud.getCoachesForChallenge(challenge.getIdChallenge())
-                    );
+            ObservableList<CoachMotivation> currentCoaches = FXCollections.observableArrayList(
+                    challengeCoachCrud.getCoachesForChallenge(challenge.getIdChallenge()));
             currentList.setItems(currentCoaches);
             currentList.setCellFactory(list -> new ListCell<>() {
                 @Override
@@ -237,12 +231,10 @@ public class ManageChallengeCoachesController implements Initializable {
                                 "-fx-background-color: #E74C3C; " +
                                         "-fx-text-fill: white; " +
                                         "-fx-font-weight: bold; " +
-                                        "-fx-padding: 2 5;"
-                        );
+                                        "-fx-padding: 2 5;");
                         removeButton.setOnAction(e -> {
                             boolean success = challengeCoachCrud.dissociateCoachFromChallenge(
-                                    challenge.getIdChallenge(), coach.getIdCoach()
-                            );
+                                    challenge.getIdChallenge(), coach.getIdCoach());
                             if (success) {
                                 currentCoaches.remove(coach);
                                 showAlert("Succès", "Coach retiré avec succès", Alert.AlertType.INFORMATION);
@@ -258,8 +250,7 @@ public class ManageChallengeCoachesController implements Initializable {
             VBox currentBox = new VBox(10);
             currentBox.getChildren().addAll(
                     new Label("✅ Coaches assignés (" + currentCoaches.size() + ") :"),
-                    currentList
-            );
+                    currentList);
 
             // Bouton pour ajouter un nouveau coach
             Button addNewButton = new Button("➕ Ajouter un coach");
@@ -267,8 +258,7 @@ public class ManageChallengeCoachesController implements Initializable {
                     "-fx-background-color: #2ECC71; " +
                             "-fx-text-fill: white; " +
                             "-fx-font-weight: bold; " +
-                            "-fx-padding: 10 20;"
-            );
+                            "-fx-padding: 10 20;");
             addNewButton.setOnAction(e -> {
                 openCoachSelector(challenge, currentCoaches);
             });
@@ -294,8 +284,7 @@ public class ManageChallengeCoachesController implements Initializable {
                     titleLabel,
                     currentBox,
                     addNewButton,
-                    buttonBox
-            );
+                    buttonBox);
 
             Scene scene = new Scene(root, 600, 500);
             stage.setScene(scene);
@@ -347,8 +336,7 @@ public class ManageChallengeCoachesController implements Initializable {
                         styleLabel.setStyle("-fx-text-fill: #7F8C8D;");
 
                         Label statusLabel = new Label(coach.isActif() ? "✅" : "❌");
-                        statusLabel.setStyle(coach.isActif() ?
-                                "-fx-text-fill: green;" : "-fx-text-fill: red;");
+                        statusLabel.setStyle(coach.isActif() ? "-fx-text-fill: green;" : "-fx-text-fill: red;");
 
                         hbox.getChildren().addAll(nameLabel, styleLabel, statusLabel);
                         setGraphic(hbox);
@@ -365,8 +353,7 @@ public class ManageChallengeCoachesController implements Initializable {
                 if (selected != null) {
                     boolean success = challengeCoachCrud.associateCoachToChallenge(
                             challenge.getIdChallenge(),
-                            selected.getIdCoach()
-                    );
+                            selected.getIdCoach());
                     if (success) {
                         currentList.add(selected);
                         stage.close();
@@ -426,7 +413,7 @@ public class ManageChallengeCoachesController implements Initializable {
 
     private void goBack() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/challenge.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/ui/motivation/MainView.fxml"));
             Stage stage = (Stage) backBtn.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

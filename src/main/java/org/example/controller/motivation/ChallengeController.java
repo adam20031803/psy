@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.controller.motivation;
 
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
@@ -18,17 +18,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.example.dao.*;
-import org.example.model.Challenge;
-import org.example.model.Recompense;
-import org.example.model.CoachMotivation;
+import org.example.dao.motivation.*;
+import org.example.model.motivation.Challenge;
+import org.example.model.motivation.Recompense;
+import org.example.model.motivation.CoachMotivation;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-
-
 
 // Nouveaux imports pour l'export PDF professionnel
 import java.io.File;
@@ -44,11 +42,9 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.awt.Color;
 
-
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javafx.scene.control.Tooltip;
-
 
 import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
@@ -56,11 +52,13 @@ import javafx.scene.layout.Priority;
 
 
 
+
 import javafx.scene.Cursor;
 import javafx.scene.shape.Circle;
+
+
 import java.awt.Color;
 import javafx.scene.layout.StackPane;
-
 
 import javafx.scene.Cursor;
 import javafx.scene.shape.Circle;
@@ -70,10 +68,10 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 
-
 import javafx.geometry.Orientation;
 import javafx.scene.layout.FlowPane;
 
+<<<<<<< HEAD
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
@@ -84,6 +82,8 @@ import java.util.Comparator;
 import java.util.List;
 
 
+=======
+>>>>>>> 99e5c7292f979544632172a6e5575543e3886964
 public class ChallengeController implements Initializable {
 
     /* ================= TABLE ================= */
@@ -107,7 +107,6 @@ public class ChallengeController implements Initializable {
     private TableColumn<Challenge, String> recompensesColumn;
     @FXML
     private TableColumn<Challenge, Void> actionsColumn;
-
 
     /* ================= FORM ================= */
     @FXML
@@ -147,7 +146,6 @@ public class ChallengeController implements Initializable {
     @FXML
     private Button dashboardBtn;
 
-
     @FXML
     private Label totalLabel;
     @FXML
@@ -161,57 +159,78 @@ public class ChallengeController implements Initializable {
     private String currentSortType = "date_desc";
 
     /* ================= DATA ================= */
-    //flexible au modification
+    // flexible au modification
     private final ObservableList<Challenge> challengeList = FXCollections.observableArrayList();
     private final ChallengeCrud challengeCrud = new ChallengeCrud();
     private final CrudCoach.ChallengeRecompenseCrud challengeRecompenseCrud = new CrudCoach.ChallengeRecompenseCrud();
-
 
     private final ChallengeCoachCrud challengeCoachCrud = new ChallengeCoachCrud();
 
     /* ================= INIT ================= */
 
-    //Méthode appelée automatiquement par JavaFX après le chargement du fichier FXML
+    // Méthode appelée automatiquement par JavaFX après le chargement du fichier
+    // FXML
     @Override
 
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("=== INITIALIZATION START ===");
-        System.out.println("totalLabel is null? " + (totalLabel == null));
-        System.out.println("actifsLabel is null? " + (actifsLabel == null));
-        System.out.println("inactifsLabel is null? " + (inactifsLabel == null));
 
         setupListView();
         setupForm();
         setupButtons();
         setupInputValidation();
+<<<<<<< HEAD
         setupSortControls(); // AJOUTER CETTE LIGNE
         loadData();
         updateStatistics();
+=======
+>>>>>>> 99e5c7292f979544632172a6e5575543e3886964
 
-        loadDataWithoutStats();
+        // Check Role
+        checkRole();
+
+        // Ensure the ListView always observes the main list
+        challengeListView.setItems(challengeList);
+
+        // Load data once - this will also trigger updateStatistics()
+        loadData();
 
         System.out.println("=== INITIALIZATION END ===");
     }
-    //charger les données des challenges dans l’interface graphique, sans calculer de statistiques.
-    private void loadDataWithoutStats() {
-        try {
-            //recuper readAll de challengeCrud et le met en challengelist
-            challengeList.setAll(challengeCrud.readAll());
-            //le listview recupere les donné de challengelist
-            challengeListView.setItems(challengeList);
-            System.out.println("Chargé " + challengeList.size() + " challenges");
-        } catch (Exception e) {
-            e.printStackTrace();
+
+    private void checkRole() {
+        if (!org.example.util.Session.isAdmin()) {
+            addBtn.setVisible(false);
+            updateBtn.setVisible(false);
+            deleteBtn.setVisible(false);
+            // coachBtn.setVisible(false); // Visible for Users now
+            // recBtn.setVisible(false); // Visible for Users now
+            exportBtn.setVisible(false);
+
+            // Disable actions column if needed, or hide it
+            if (actionsColumn != null) {
+                actionsColumn.setVisible(false);
+            }
+
+            // Hide form fields if desired, or make them read-only
+            // For now, hiding buttons prevents actions.
+            // You might want to hide the whole form container if users shouldn't see it.
         }
     }
-    /*configure un ListView JavaFX pour afficher des Challenge
-     sous forme de cartes personnalisées avec du style, des boutons et des interactions.*/
+
+    /*
+     * configure un ListView JavaFX pour afficher des Challenge
+     * sous forme de cartes personnalisées avec du style, des boutons et des
+     * interactions.
+     */
     private void setupListView() {
-        //setCellFactory permet de personnaliser l’apparence et le comportement de chaque cellule dans le ListView
-        //on crée une classe anonyme qui hérite de ListCell<Challenge> pour définir le rendu des challenges.
+        // setCellFactory permet de personnaliser l’apparence et le comportement de
+        // chaque cellule dans le ListView
+        // on crée une classe anonyme qui hérite de ListCell<Challenge> pour définir le
+        // rendu des challenges.
         challengeListView.setCellFactory(param -> new ListCell<Challenge>() {
-            //Hbox:conteneur pour organiser les element horizentallement
-            //Vbox:conteneur pour organiser les element verticallement
+            // Hbox:conteneur pour organiser les element horizentallement
+            // Vbox:conteneur pour organiser les element verticallement
             private final HBox card = new HBox(15);
             private final VBox content = new VBox(8);
             private final HBox header = new HBox(10);
@@ -244,20 +263,21 @@ public class ChallengeController implements Initializable {
                         "-fx-border-radius: 12; " +
                         "-fx-border-width: 1; " +
                         "-fx-cursor: hand;");
-                //contenu aligné à gauche.
+                // contenu aligné à gauche.
                 card.setAlignment(Pos.CENTER_LEFT);
-                //la carte peut s’étendre pour remplir horizontalement.
+                // la carte peut s’étendre pour remplir horizontalement.
                 card.setMaxWidth(Double.MAX_VALUE);
 
                 // Configuration du header
                 header.setAlignment(Pos.CENTER_LEFT);
 
                 titleLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: 900; -fx-text-fill: black;");
-                //evite le debordement(text retoure a la ligne)
+                // evite le debordement(text retoure a la ligne)
                 titleLabel.setWrapText(true);
                 titleLabel.setMaxWidth(250);
 
-                statusLabel.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 3 8; -fx-background-radius: 10;");
+                statusLabel.setStyle(
+                        "-fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 3 8; -fx-background-radius: 10;");
 
                 // Description
                 descLabel.setWrapText(true);
@@ -314,7 +334,7 @@ public class ChallengeController implements Initializable {
                 HBox mainContent = new HBox(15);
                 mainContent.setAlignment(Pos.CENTER_LEFT);
                 mainContent.getChildren().addAll(leftContent, rightColumn);
-                //Elle retourne la liste des nœuds enfants de ce conteneur
+                // Elle retourne la liste des nœuds enfants de ce conteneur
                 content.getChildren().addAll(mainContent, actionBox);
 
                 VBox mainCard = new VBox(10);
@@ -350,11 +370,12 @@ public class ChallengeController implements Initializable {
                 });
             }
 
-            //updateItem est appelée chaque fois qu’une cellule doit afficher un nouvel élément ou se vider.
+            // updateItem est appelée chaque fois qu’une cellule doit afficher un nouvel
+            // élément ou se vider.
 
             @Override
             protected void updateItem(Challenge challenge, boolean empty) {
-                //on appelle la méthode de la classe parente pour préparer la cellule.
+                // on appelle la méthode de la classe parente pour préparer la cellule.
                 super.updateItem(challenge, empty);
 
                 if (empty || challenge == null) {
@@ -395,22 +416,24 @@ public class ChallengeController implements Initializable {
 
                     // Mise à jour du header
                     header.getChildren().clear();
-                    //separateur entre titre  et status(dans header)
+                    // separateur entre titre et status(dans header)
                     Region spacer = new Region();
-                    //le spacer prend tout l’espace disponible entre les éléments.
+                    // le spacer prend tout l’espace disponible entre les éléments.
                     HBox.setHgrow(spacer, Priority.ALWAYS);
                     header.getChildren().addAll(titleLabel, spacer, statusLabel);
-                    //=>Résultat : dans la ligne du header, le titre reste à gauche, le statut à droite, même si la largeur de la carte change.
+                    // =>Résultat : dans la ligne du header, le titre reste à gauche, le statut à
+                    // droite, même si la largeur de la carte change.
 
                     // Coaches associés
-                    List<CoachMotivation> coaches = challengeCoachCrud.getCoachesForChallenge(challenge.getIdChallenge());
+                    List<CoachMotivation> coaches = challengeCoachCrud
+                            .getCoachesForChallenge(challenge.getIdChallenge());
                     if (coaches.isEmpty()) {
                         coachesLabel.setText("👤 Aucun coach");
                         coachesLabel.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 11px;");
                         coachesLabel.setOnMouseClicked(null);
                     } else {
 
-                        //construire dynamiquement le texte du label.
+                        // construire dynamiquement le texte du label.
                         StringBuilder coachesText = new StringBuilder("👤 ");
                         for (int i = 0; i < Math.min(coaches.size(), 2); i++) {
                             coachesText.append(coaches.get(i).getNomCoach());
@@ -425,22 +448,26 @@ public class ChallengeController implements Initializable {
 
                         coachesLabel.setText(coachesText.toString());
                         coachesLabel.setStyle("-fx-text-fill: #2ECC71; -fx-font-size: 11px; -fx-font-weight: bold;");
-                        //cursor cliquable
+                        // cursor cliquable
                         coachesLabel.setCursor(Cursor.HAND);
 
                         coachesLabel.setOnMouseClicked(e -> {
-                            //empêche l’événement de remonter à la cellule entière
+                            // empêche l’événement de remonter à la cellule entière
                             e.consume();
-                            //ouvre un popup avec tous les coaches associés au challenge.
+                            // ouvre un popup avec tous les coaches associés au challenge.
                             showCoachesPopup(challenge, coaches);
                         });
                     }
 
                     // Récompenses associées
 
-                    /*challengeRecompenseCrud.getRecompensesByChallenge(...) → méthode qui interroge la base de données
-                     pour récupérer toutes les récompenses liées à ce challenge.*/
-                    List<Recompense> recompenses = challengeRecompenseCrud.getRecompensesByChallenge(challenge.getIdChallenge());
+                    /*
+                     * challengeRecompenseCrud.getRecompensesByChallenge(...) → méthode qui
+                     * interroge la base de données
+                     * pour récupérer toutes les récompenses liées à ce challenge.
+                     */
+                    List<Recompense> recompenses = challengeRecompenseCrud
+                            .getRecompensesByChallenge(challenge.getIdChallenge());
                     if (recompenses.isEmpty()) {
                         rewardsLabel.setText("🎁 Aucune récompense");
                         rewardsLabel.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 11px;");
@@ -487,7 +514,8 @@ public class ChallengeController implements Initializable {
                     Label coachIcon = new Label("👤");
                     Label coachCount = new Label(String.valueOf(coaches.size()));
                     coachCount.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: black;");
-                    coachBadge.setStyle("-fx-background-color: rgba(52,152,219,0.2); -fx-background-radius: 10; -fx-padding: 3 8;");
+                    coachBadge.setStyle(
+                            "-fx-background-color: rgba(52,152,219,0.2); -fx-background-radius: 10; -fx-padding: 3 8;");
                     coachBadge.getChildren().addAll(coachIcon, coachCount);
 
                     // Badge pour le nombre de récompenses
@@ -496,36 +524,37 @@ public class ChallengeController implements Initializable {
                     Label rewardIcon = new Label("🎁");
                     Label rewardCount = new Label(String.valueOf(recompenses.size()));
                     rewardCount.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: black;");
-                    rewardBadge.setStyle("-fx-background-color: rgba(155,89,182,0.2); -fx-background-radius: 10; -fx-padding: 3 8;");
+                    rewardBadge.setStyle(
+                            "-fx-background-color: rgba(155,89,182,0.2); -fx-background-radius: 10; -fx-padding: 3 8;");
                     rewardBadge.getChildren().addAll(rewardIcon, rewardCount);
 
-                    //La VBox statsBox contient maintenant :
+                    // La VBox statsBox contient maintenant :
                     //
-                    //ID du challenge (#12)
+                    // ID du challenge (#12)
                     //
-                    //Badge coaches 👤 + nombre
+                    // Badge coaches 👤 + nombre
                     //
-                    //Badge récompenses 🎁 + nombre
+                    // Badge récompenses 🎁 + nombre
                     statsBox.getChildren().addAll(idLabel, coachBadge, rewardBadge);
                     rightColumn.getChildren().add(statsBox);
 
                     // Mise à jour des actions des boutons
-                    //action declenché lors d un clic
+                    // action declenché lors d un clic
                     detailsBtn.setOnAction(e -> showChallengeDetail(challenge));
                     coachesBtn.setOnAction(e -> openCoachManager(challenge));
                     rewardsBtn.setOnAction(e -> openRecompenseManager(challenge));
 
-                    //card est un VBox ou HBox qui contient toute ta structure :
+                    // card est un VBox ou HBox qui contient toute ta structure :
                     //
-                    //header
+                    // header
                     //
-                    //infoRow
+                    // infoRow
                     //
-                    //bottomRow
+                    // bottomRow
                     //
-                    //rightColumn
+                    // rightColumn
                     //
-                    //boutons
+                    // boutons
 
                     setGraphic(card);
                 }
@@ -533,17 +562,16 @@ public class ChallengeController implements Initializable {
         });
 
         // Sélection d'un élément
-        //newVal contient le challenge sélectionné
-        //oldval:selection precedant
-        //adlistner :s je clic fais quelque chose
+        // newVal contient le challenge sélectionné
+        // oldval:selection precedant
+        // adlistner :s je clic fais quelque chose
         challengeListView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> {
                     if (newVal != null) {
-                        //load les donné de l element selectionné
+                        // load les donné de l element selectionné
                         loadChallengeData(newVal);
                     }
-                }
-        );
+                });
 
         // Style de la ListView
         challengeListView.setStyle("-fx-background-color: transparent; " +
@@ -572,16 +600,22 @@ public class ChallengeController implements Initializable {
         exportBtn.setOnAction(e -> exportToPDF());
 
         dashboardBtn.setOnAction(e -> goToDashboard());
+<<<<<<< HEAD
         //getSelectionModel:’est l’objet qui gère :Quel élément est sélectionné
         //selectedItemProperty():L’élément actuellement sélectionné dans la ListView.
         //addListener(...):Quand la sélection change → on exécute la lambda.
 
+=======
+        // getSelectionModel:’est l’objet qui gère :Quel élément est sélectionné
+        // selectedItemProperty():L’élément actuellement sélectionné dans la ListView.
+        // addListener(...):Quand la sélection change → on exécute la lambda.
+>>>>>>> 99e5c7292f979544632172a6e5575543e3886964
 
         challengeListView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> {
-                    if (newVal != null) loadChallengeData(newVal);
-                }
-        );
+                    if (newVal != null)
+                        loadChallengeData(newVal);
+                });
     }
 
     // ==================== CONTRÔLE DE SAISIE ====================
@@ -674,15 +708,16 @@ public class ChallengeController implements Initializable {
 
     private void showFieldError(Control field, String message) {
         field.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-        //"Est-ce que le champ est un champ texte ?"
+        // "Est-ce que le champ est un champ texte ?"
         if (field instanceof TextInputControl) {
-            //On transforme le Control en TextInputControl
+            // On transforme le Control en TextInputControl
             ((TextInputControl) field).setTooltip(new Tooltip(message));
         } else if (field instanceof ComboBox) {
             field.setTooltip(new Tooltip(message));
         }
     }
-    //Supprimer l’affichage d’erreur d’un champ.
+
+    // Supprimer l’affichage d’erreur d’un champ.
     private void clearFieldError(Control field) {
         field.setStyle("");
         field.setTooltip(null);
@@ -705,7 +740,8 @@ public class ChallengeController implements Initializable {
             isValid = false;
         } else if (titre.matches("\\d+")) {
             showFieldError(titleField, "Le titre ne doit pas être composé uniquement de chiffres");
-            showAlert("Validation", "Le titre ne doit pas être composé uniquement de chiffres", Alert.AlertType.WARNING);
+            showAlert("Validation", "Le titre ne doit pas être composé uniquement de chiffres",
+                    Alert.AlertType.WARNING);
             titleField.requestFocus();
             isValid = false;
         } else if (!titre.matches(".*[a-zA-Z].*")) {
@@ -741,7 +777,8 @@ public class ChallengeController implements Initializable {
         } else if (description.matches("\\d+")) {
             showFieldError(descField, "La description ne doit pas être composée uniquement de chiffres");
             if (isValid) {
-                showAlert("Validation", "La description ne doit pas être composée uniquement de chiffres", Alert.AlertType.WARNING);
+                showAlert("Validation", "La description ne doit pas être composée uniquement de chiffres",
+                        Alert.AlertType.WARNING);
                 descField.requestFocus();
             }
             isValid = false;
@@ -806,7 +843,8 @@ public class ChallengeController implements Initializable {
         if (difficulteField.getValue() == null || difficulteField.getValue().isEmpty()) {
             showFieldError(difficulteField, "La difficulté est obligatoire");
             showAlert("Validation", "La difficulté est obligatoire", Alert.AlertType.WARNING);
-            if (isValid) difficulteField.requestFocus();
+            if (isValid)
+                difficulteField.requestFocus();
             isValid = false;
         } else {
             clearFieldError(difficulteField);
@@ -815,7 +853,8 @@ public class ChallengeController implements Initializable {
         if (typeField.getValue() == null || typeField.getValue().isEmpty()) {
             showFieldError(typeField, "Le type est obligatoire");
             showAlert("Validation", "Le type est obligatoire", Alert.AlertType.WARNING);
-            if (isValid) typeField.requestFocus();
+            if (isValid)
+                typeField.requestFocus();
             isValid = false;
         } else {
             clearFieldError(typeField);
@@ -827,9 +866,11 @@ public class ChallengeController implements Initializable {
     /* ================= DATA ================= */
     private void loadData() {
         try {
-            List<Challenge> challenges = challengeCrud.readAll();
-            ObservableList<Challenge> observableList = FXCollections.observableArrayList(challenges);
-            challengeListView.setItems(observableList);
+            // Mettre à jour la liste principale (challengeList est un membre de la classe)
+            challengeList.setAll(challengeCrud.readAll());
+            System.out.println("Chargé " + challengeList.size() + " challenges");
+
+            // Calculer les statistiques après le chargement
             updateStatistics();
         } catch (Exception e) {
             e.printStackTrace();
@@ -854,14 +895,32 @@ public class ChallengeController implements Initializable {
                     .collect(Collectors.toList());
         }
 
+<<<<<<< HEAD
         // Appliquer le tri actuel sur les résultats filtrés
         challengeList.setAll(filtered);
         sortChallenges(currentSortType); // Réappliquer le tri
+=======
+        List<Challenge> filtered = challengeCrud.readAll().stream()
+                .filter(c -> c.getTitre().toLowerCase().contains(keyword) ||
+                        c.getDescription().toLowerCase().contains(keyword) ||
+                        c.getTypeChallenge().toLowerCase().contains(keyword) ||
+                        c.getNiveauDifficulte().toLowerCase().contains(keyword))
+                .collect(Collectors.toList());
+
+        // Pour la recherche, on peut temporairement changer la source du ListView
+        // Mais attention : challengeList reste l'état complet pour les stats?
+        // Habituellement, les stats sur le tableau de bord reflètent la base complète,
+        // ou la vue filtrée? Dans Gestion, c'est souvent la base.
+        challengeListView.setItems(FXCollections.observableArrayList(filtered));
+        // On ne met pas à jour les stats ici si on veut qu'elles gardent le total
+        // global
+>>>>>>> 99e5c7292f979544632172a6e5575543e3886964
     }
 
     /* ================= CRUD ================= */
     private void addChallenge() {
-        if (!validateForm()) return;
+        if (!validateForm())
+            return;
 
         try {
             Challenge challenge = new Challenge(
@@ -869,8 +928,7 @@ public class ChallengeController implements Initializable {
                     descField.getText().trim(),
                     Integer.parseInt(dureeField.getText().trim()),
                     difficulteField.getValue(),
-                    typeField.getValue()
-            );
+                    typeField.getValue());
 
             challenge.setActif(actifField.isSelected());
             challengeCrud.create(challenge);
@@ -892,7 +950,8 @@ public class ChallengeController implements Initializable {
             return;
         }
 
-        if (!validateForm()) return;
+        if (!validateForm())
+            return;
 
         try {
             selected.setTitre(titleField.getText().trim());
@@ -958,10 +1017,8 @@ public class ChallengeController implements Initializable {
 
             // Liste des récompenses actuelles
             ListView<Recompense> currentList = new ListView<>();
-            ObservableList<Recompense> currentRecompenses =
-                    FXCollections.observableArrayList(
-                            challengeRecompenseCrud.getRecompensesByChallenge(challenge.getIdChallenge())
-                    );
+            ObservableList<Recompense> currentRecompenses = FXCollections.observableArrayList(
+                    challengeRecompenseCrud.getRecompensesByChallenge(challenge.getIdChallenge()));
             currentList.setItems(currentRecompenses);
             currentList.setCellFactory(list -> new ListCell<>() {
                 @Override
@@ -978,8 +1035,7 @@ public class ChallengeController implements Initializable {
             VBox currentBox = new VBox(10);
             currentBox.getChildren().addAll(
                     new Label("✅ Récompenses assignées (" + currentRecompenses.size() + ") :"),
-                    currentList
-            );
+                    currentList);
 
             // Bouton pour ajouter une nouvelle récompense
             Button addNewButton = new Button("➕ Ajouter une récompense");
@@ -987,8 +1043,7 @@ public class ChallengeController implements Initializable {
                     "-fx-background-color: #2ECC71; " +
                             "-fx-text-fill: white; " +
                             "-fx-font-weight: bold; " +
-                            "-fx-padding: 10 20;"
-            );
+                            "-fx-padding: 10 20;");
             addNewButton.setOnAction(e -> {
                 openRecompenseSelector(challenge, currentRecompenses);
             });
@@ -1014,8 +1069,7 @@ public class ChallengeController implements Initializable {
                     titleLabel,
                     currentBox,
                     addNewButton,
-                    buttonBox
-            );
+                    buttonBox);
 
             Scene scene = new Scene(root, 500, 400);
             stage.setScene(scene);
@@ -1072,8 +1126,7 @@ public class ChallengeController implements Initializable {
                 if (selected != null) {
                     challengeRecompenseCrud.associateRecompense(
                             challenge.getIdChallenge(),
-                            selected.getIdRecompense()
-                    );
+                            selected.getIdRecompense());
                     currentList.add(selected);
                     stage.close();
                 }
@@ -1137,12 +1190,12 @@ public class ChallengeController implements Initializable {
         alert.showAndWait();
     }
 
-
     /* ================= NAVIGATION VERS DASHBOARD ================= */
     private void goToDashboard() {
         try {
             // Charger le fichier FXML du dashboard
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard_statistiques.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/org/example/ui/motivation/dashboard_statistiques.fxml"));
             Parent root = loader.load();
 
             // Obtenir la scène actuelle
@@ -1157,8 +1210,7 @@ public class ChallengeController implements Initializable {
             // Animation de transition (optionnelle)
             stage.setOpacity(0);
             javafx.animation.FadeTransition fade = new javafx.animation.FadeTransition(
-                    javafx.util.Duration.millis(300), stage.getScene().getRoot()
-            );
+                    javafx.util.Duration.millis(300), stage.getScene().getRoot());
             fade.setFromValue(0);
             fade.setToValue(1);
             fade.play();
@@ -1172,7 +1224,7 @@ public class ChallengeController implements Initializable {
 
     private void goToCoaches() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/coach.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/ui/motivation/coach.fxml"));
             Stage stage = (Stage) coachBtn.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -1183,7 +1235,8 @@ public class ChallengeController implements Initializable {
 
     private void goToRecompenses() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RecompenseView.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/org/example/ui/motivation/RecompenseView.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) recBtn.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -1195,7 +1248,6 @@ public class ChallengeController implements Initializable {
         }
     }
 
-
     /* ================= EXPORT PDF ================= */
     /* ================= EXPORT SIMPLE (SANS PDFBOX) ================= */
     /* ================= EXPORT PDF PROFESSIONNEL ================= */
@@ -1205,8 +1257,7 @@ public class ChallengeController implements Initializable {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Exporter les challenges en PDF");
             fileChooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf")
-            );
+                    new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
 
             fileChooser.setInitialFileName("challenges_" +
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + ".pdf");
@@ -1330,11 +1381,12 @@ public class ChallengeController implements Initializable {
             contentStream.showText("Genere automatiquement par le systeme de gestion des challenges");
             contentStream.endText();
 
+            // image logo
 
-            //image logo
-
-            String imageLeftPath = getClass().getResource("/org/example/image/logo_equipe-removebg-preview (1).png").toURI().getPath();
-            String imageRightPath = getClass().getResource("/org/example/image/Logo_ESPRIT_-_Tunisie.png").toURI().getPath();
+            String imageLeftPath = getClass().getResource("/org/example/image/logo_equipe-removebg-preview (1).png")
+                    .toURI().getPath();
+            String imageRightPath = getClass().getResource("/org/example/image/Logo_ESPRIT_-_Tunisie.png").toURI()
+                    .getPath();
 
             PDImageXObject imageLeft = PDImageXObject.createFromFile(imageLeftPath, document);
             PDImageXObject imageRight = PDImageXObject.createFromFile(imageRightPath, document);
@@ -1346,7 +1398,6 @@ public class ChallengeController implements Initializable {
 
             // Récupération de la largeur de la page
 
-
             // Dessiner l'image gauche (en bas à gauche)
             contentStream.drawImage(imageLeft, margin, 20, imageWidth, imageHeight);
 
@@ -1356,8 +1407,8 @@ public class ChallengeController implements Initializable {
     }
 
     private void drawStatCard(PDPageContentStream contentStream, float x, float y,
-                              float width, float height, Color color,
-                              String label, String value, String unit) throws Exception {
+            float width, float height, Color color,
+            String label, String value, String unit) throws Exception {
         // Fond de la carte
         contentStream.setNonStrokingColor(color);
         contentStream.addRect(x, y, width, height);
@@ -1492,7 +1543,8 @@ public class ChallengeController implements Initializable {
         return y - 10;
     }
 
-    private float drawStatLine(PDPageContentStream contentStream, float y, String label, String value) throws Exception {
+    private float drawStatLine(PDPageContentStream contentStream, float y, String label, String value)
+            throws Exception {
         // CORRIGÉ
         contentStream.beginText();
         contentStream.setNonStrokingColor(Color.BLACK);
@@ -1559,22 +1611,20 @@ public class ChallengeController implements Initializable {
     }
 
     private float drawChallengeCard(PDPageContentStream contentStream, Challenge challenge,
-                                    float y, float pageWidth) throws Exception {
+            float y, float pageWidth) throws Exception {
         float cardHeight = 180;
         float margin = 50;
         float cardWidth = pageWidth - 2 * margin;
 
         // Fond de la carte avec couleur selon le statut
-        Color cardColor = challenge.isActif() ?
-                new Color(236, 240, 241) : new Color(250, 235, 235);
+        Color cardColor = challenge.isActif() ? new Color(236, 240, 241) : new Color(250, 235, 235);
 
         contentStream.setNonStrokingColor(cardColor);
         contentStream.addRect(margin, y - cardHeight, cardWidth, cardHeight);
         contentStream.fill();
 
         // Bordure colorée à gauche
-        Color borderColor = challenge.isActif() ?
-                new Color(46, 204, 113) : new Color(231, 76, 60);
+        Color borderColor = challenge.isActif() ? new Color(46, 204, 113) : new Color(231, 76, 60);
 
         contentStream.setNonStrokingColor(borderColor);
         contentStream.addRect(margin, y - cardHeight, 10, cardHeight);
@@ -1677,7 +1727,7 @@ public class ChallengeController implements Initializable {
     }
 
     private void drawInfoItem(PDPageContentStream contentStream, float x, float y,
-                              String label, String value) throws Exception {
+            String label, String value) throws Exception {
         // CORRIGÉ
         contentStream.beginText();
         contentStream.setNonStrokingColor(new Color(127, 140, 141));
@@ -1695,7 +1745,6 @@ public class ChallengeController implements Initializable {
         contentStream.endText();
     }
 
-
     /* ================= MISE À JOUR DES STATISTIQUES ================= */
     /* ================= MISE À JOUR DES STATISTIQUES ================= */
     private void updateStatistics() {
@@ -1706,11 +1755,13 @@ public class ChallengeController implements Initializable {
             }
             if (actifsLabel != null) {
                 actifsLabel.setText("0");
-                actifsLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: 900; -fx-text-fill: #00FF88;"); // Vert vif néon
+                actifsLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: 900; -fx-text-fill: #00FF88;"); // Vert vif
+                                                                                                            // néon
             }
             if (inactifsLabel != null) {
                 inactifsLabel.setText("0");
-                inactifsLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: 900; -fx-text-fill: #FF6B6B;"); // Rouge vif
+                inactifsLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: 900; -fx-text-fill: #FF6B6B;"); // Rouge
+                                                                                                              // vif
             }
             return;
         }
@@ -1735,9 +1786,12 @@ public class ChallengeController implements Initializable {
         }
 
         // Optionnel: animation
-        if (totalLabel != null) animateLabel(totalLabel);
-        if (actifsLabel != null) animateLabel(actifsLabel);
-        if (inactifsLabel != null) animateLabel(inactifsLabel);
+        if (totalLabel != null)
+            animateLabel(totalLabel);
+        if (actifsLabel != null)
+            animateLabel(actifsLabel);
+        if (inactifsLabel != null)
+            animateLabel(inactifsLabel);
     }
 
     /* ================= ANIMATION DES LABELS ================= */
@@ -1753,7 +1807,6 @@ public class ChallengeController implements Initializable {
         scaleTransition.setToY(1.0);
         scaleTransition.play();
     }
-
 
     /* ================= GESTION DES COACHES ================= */
     private void openCoachManager(Challenge challenge) {
@@ -1772,10 +1825,8 @@ public class ChallengeController implements Initializable {
 
             // Liste des coaches actuels
             ListView<CoachMotivation> currentList = new ListView<>();
-            ObservableList<CoachMotivation> currentCoaches =
-                    FXCollections.observableArrayList(
-                            challengeCoachCrud.getCoachesForChallenge(challenge.getIdChallenge())
-                    );
+            ObservableList<CoachMotivation> currentCoaches = FXCollections.observableArrayList(
+                    challengeCoachCrud.getCoachesForChallenge(challenge.getIdChallenge()));
             currentList.setItems(currentCoaches);
             currentList.setCellFactory(list -> new ListCell<CoachMotivation>() {
                 @Override
@@ -1798,12 +1849,10 @@ public class ChallengeController implements Initializable {
                                 "-fx-background-color: #E74C3C; " +
                                         "-fx-text-fill: white; " +
                                         "-fx-font-weight: bold; " +
-                                        "-fx-padding: 2 5;"
-                        );
+                                        "-fx-padding: 2 5;");
                         removeButton.setOnAction(e -> {
                             boolean success = challengeCoachCrud.dissociateCoachFromChallenge(
-                                    challenge.getIdChallenge(), coach.getIdCoach()
-                            );
+                                    challenge.getIdChallenge(), coach.getIdCoach());
                             if (success) {
                                 currentCoaches.remove(coach);
                                 showAlert("Succès", "Coach retiré avec succès", Alert.AlertType.INFORMATION);
@@ -1821,8 +1870,7 @@ public class ChallengeController implements Initializable {
             VBox currentBox = new VBox(10);
             currentBox.getChildren().addAll(
                     new Label("✅ Coaches assignés (" + currentCoaches.size() + ") :"),
-                    currentList
-            );
+                    currentList);
 
             // Bouton pour ajouter un nouveau coach
             Button addNewButton = new Button("➕ Ajouter un coach");
@@ -1830,8 +1878,7 @@ public class ChallengeController implements Initializable {
                     "-fx-background-color: #2ECC71; " +
                             "-fx-text-fill: white; " +
                             "-fx-font-weight: bold; " +
-                            "-fx-padding: 10 20;"
-            );
+                            "-fx-padding: 10 20;");
             addNewButton.setOnAction(e -> {
                 openCoachSelector(challenge, currentCoaches);
             });
@@ -1857,8 +1904,7 @@ public class ChallengeController implements Initializable {
                     titleLabel,
                     currentBox,
                     addNewButton,
-                    buttonBox
-            );
+                    buttonBox);
 
             Scene scene = new Scene(root, 600, 500);
             stage.setScene(scene);
@@ -1911,8 +1957,7 @@ public class ChallengeController implements Initializable {
                         styleLabel.setStyle("-fx-text-fill: #7F8C8D;");
 
                         Label statusLabel = new Label(coach.isActif() ? "✅" : "❌");
-                        statusLabel.setStyle(coach.isActif() ?
-                                "-fx-text-fill: green;" : "-fx-text-fill: red;");
+                        statusLabel.setStyle(coach.isActif() ? "-fx-text-fill: green;" : "-fx-text-fill: red;");
 
                         hbox.getChildren().addAll(nameLabel, styleLabel, statusLabel);
                         setGraphic(hbox);
@@ -1929,8 +1974,7 @@ public class ChallengeController implements Initializable {
                 if (selected != null) {
                     boolean success = challengeCoachCrud.associateCoachToChallenge(
                             challenge.getIdChallenge(),
-                            selected.getIdCoach()
-                    );
+                            selected.getIdCoach());
                     if (success) {
                         currentList.add(selected);
                         stage.close();
@@ -1981,7 +2025,8 @@ public class ChallengeController implements Initializable {
                     } else {
                         HBox hbox = new HBox(10);
                         hbox.setAlignment(Pos.CENTER_LEFT);
-                        hbox.setStyle("-fx-padding: 10; -fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 5;");
+                        hbox.setStyle(
+                                "-fx-padding: 10; -fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 5;");
 
                         // Avatar/icône
                         Label icon = new Label("👤");
@@ -1996,13 +2041,14 @@ public class ChallengeController implements Initializable {
 
                         // Statut avec badge coloré
                         Label statusLabel = new Label(coach.isActif() ? "✅ ACTIF" : "❌ INACTIF");
-                        statusLabel.setStyle(coach.isActif() ?
-                                "-fx-text-fill: #2ECC71; -fx-font-size: 11px; -fx-font-weight: bold;" :
-                                "-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-weight: bold;");
+                        statusLabel.setStyle(
+                                coach.isActif() ? "-fx-text-fill: #2ECC71; -fx-font-size: 11px; -fx-font-weight: bold;"
+                                        : "-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-weight: bold;");
 
                         infoBox.getChildren().addAll(nameLabel, styleLabel, statusLabel);
 
                         Button detailBtn = new Button("📋 Détails");
+<<<<<<< HEAD
                         detailBtn.setStyle("-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
                         detailBtn.setOnAction(e -> {
                             try {
@@ -2026,6 +2072,11 @@ public class ChallengeController implements Initializable {
                                 showAlert("Erreur", "Impossible de charger les détails du coach", Alert.AlertType.ERROR);
                             }
                         });
+=======
+                        detailBtn.setStyle(
+                                "-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
+                        detailBtn.setOnAction(e -> showCoachDetail(coach));
+>>>>>>> 99e5c7292f979544632172a6e5575543e3886964
 
                         Region spacer = new Region();
                         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -2046,7 +2097,8 @@ public class ChallengeController implements Initializable {
             });
 
             Button closeButton = new Button("Fermer");
-            closeButton.setStyle("-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
+            closeButton.setStyle(
+                    "-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
             closeButton.setOnAction(e -> popupStage.close());
 
             root.getChildren().addAll(titleLabel, coachesList, closeButton);
@@ -2087,7 +2139,8 @@ public class ChallengeController implements Initializable {
                     } else {
                         HBox hbox = new HBox(10);
                         hbox.setAlignment(Pos.CENTER_LEFT);
-                        hbox.setStyle("-fx-padding: 10; -fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 5;");
+                        hbox.setStyle(
+                                "-fx-padding: 10; -fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 5;");
 
                         // Icône selon le type
                         Label icon = new Label(getIconForRecompenseType(recompense.getTypeRecompense()));
@@ -2114,14 +2167,15 @@ public class ChallengeController implements Initializable {
 
                         // Statut
                         Label statusLabel = new Label(recompense.isActif() ? "✅ ACTIF" : "❌ INACTIF");
-                        statusLabel.setStyle(recompense.isActif() ?
-                                "-fx-text-fill: #2ECC71; -fx-font-size: 11px; -fx-font-weight: bold;" :
-                                "-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-weight: bold;");
+                        statusLabel.setStyle(recompense.isActif()
+                                ? "-fx-text-fill: #2ECC71; -fx-font-size: 11px; -fx-font-weight: bold;"
+                                : "-fx-text-fill: #E74C3C; -fx-font-size: 11px; -fx-font-weight: bold;");
                         infoBox.getChildren().add(statusLabel);
 
                         // Bouton pour voir les détails
                         Button detailBtn = new Button("👁️ Voir");
-                        detailBtn.setStyle("-fx-background-color: #9B59B6; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 3 8; -fx-font-size: 11px;");
+                        detailBtn.setStyle(
+                                "-fx-background-color: #9B59B6; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 3 8; -fx-font-size: 11px;");
                         detailBtn.setOnAction(e -> showRecompenseDetail(recompense));
 
                         HBox bottomBox = new HBox(10);
@@ -2151,7 +2205,8 @@ public class ChallengeController implements Initializable {
             });
 
             Button closeButton = new Button("Fermer");
-            closeButton.setStyle("-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
+            closeButton.setStyle(
+                    "-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
             closeButton.setOnAction(e -> popupStage.close());
 
             root.getChildren().addAll(titleLabel, recompensesList, closeButton);
@@ -2167,7 +2222,8 @@ public class ChallengeController implements Initializable {
 
     /* ================= MÉTHODE POUR ICÔNES DE RÉCOMPENSES ================= */
     private String getIconForRecompenseType(String type) {
-        if (type == null) return "🎁";
+        if (type == null)
+            return "🎁";
 
         switch (type.toLowerCase()) {
             case "médaille":
@@ -2238,7 +2294,8 @@ public class ChallengeController implements Initializable {
             // Section des informations
             // ========== SECTION DES INFORMATIONS ==========
             VBox infoSection = new VBox(15);
-            infoSection.setStyle("-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 15;");
+            infoSection.setStyle(
+                    "-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 15;");
 
 // Style de coaching
             HBox styleBox = new HBox(10);
@@ -2280,8 +2337,8 @@ public class ChallengeController implements Initializable {
             descTitle.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 100;");
 
             String description = coach.getDescription();
-            Label descValue = new Label(description != null && !description.isEmpty() ?
-                    description : "Aucune description disponible");
+            Label descValue = new Label(
+                    description != null && !description.isEmpty() ? description : "Aucune description disponible");
             descValue.setStyle("-fx-text-fill: #2ECC71; -fx-font-size: 12px;");
             descValue.setWrapText(true);
             descValue.setMaxWidth(350);
@@ -2294,9 +2351,8 @@ public class ChallengeController implements Initializable {
             Label statusTitle = new Label("Statut:");
             statusTitle.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 100;");
             Label statusValue = new Label(coach.isActif() ? "ACTIF" : "INACTIF");
-            statusValue.setStyle(coach.isActif() ?
-                    "-fx-text-fill: #2ECC71; -fx-font-weight: bold;" :
-                    "-fx-text-fill: #E74C3C; -fx-font-weight: bold;");
+            statusValue.setStyle(coach.isActif() ? "-fx-text-fill: #2ECC71; -fx-font-weight: bold;"
+                    : "-fx-text-fill: #E74C3C; -fx-font-weight: bold;");
             statusBox.getChildren().addAll(statusIcon, statusTitle, statusValue);
 
 // ID Coach
@@ -2387,8 +2443,8 @@ public class ChallengeController implements Initializable {
             descTitle.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 120;");
 
             String description = recompense.getDescription();
-            Label descValue = new Label(description != null && !description.isEmpty() ?
-                    description : "Aucune description disponible");
+            Label descValue = new Label(
+                    description != null && !description.isEmpty() ? description : "Aucune description disponible");
             descValue.setStyle("-fx-text-fill: #ECF0F1; -fx-font-size: 13px;");
             descValue.setWrapText(true);
             descValue.setMaxWidth(400);
@@ -2405,8 +2461,8 @@ public class ChallengeController implements Initializable {
             conditionTitle.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 120;");
 
             String condition = recompense.getConditionObtention();
-            Label conditionValue = new Label(condition != null && !condition.trim().isEmpty() ?
-                    condition : "Aucune condition spécifique");
+            Label conditionValue = new Label(
+                    condition != null && !condition.trim().isEmpty() ? condition : "Aucune condition spécifique");
             conditionValue.setStyle("-fx-text-fill: #F1C40F; -fx-font-weight: bold; -fx-font-size: 13px;");
             conditionValue.setWrapText(true);
             conditionValue.setMaxWidth(400);
@@ -2426,9 +2482,9 @@ public class ChallengeController implements Initializable {
             Label statusLabel = new Label("Statut:");
             statusLabel.setStyle("-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 11px;");
             Label statusValue = new Label(recompense.isActif() ? "ACTIVE" : "INACTIVE");
-            statusValue.setStyle(recompense.isActif() ?
-                    "-fx-text-fill: #2ECC71; -fx-font-weight: bold; -fx-font-size: 14px;" :
-                    "-fx-text-fill: #E74C3C; -fx-font-weight: bold; -fx-font-size: 14px;");
+            statusValue.setStyle(
+                    recompense.isActif() ? "-fx-text-fill: #2ECC71; -fx-font-weight: bold; -fx-font-size: 14px;"
+                            : "-fx-text-fill: #E74C3C; -fx-font-weight: bold; -fx-font-size: 14px;");
             statusBox.getChildren().addAll(statusIcon, statusLabel, statusValue);
 
             // ID
@@ -2484,7 +2540,8 @@ public class ChallengeController implements Initializable {
 
     /* ================= MÉTHODE POUR COULEURS DE RÉCOMPENSES ================= */
     private String getColorForRecompenseType(String type) {
-        if (type == null) return "linear-gradient(to bottom right, #9B59B6, #8E44AD)";
+        if (type == null)
+            return "linear-gradient(to bottom right, #9B59B6, #8E44AD)";
 
         switch (type.toLowerCase()) {
             case "médaille":
@@ -2510,7 +2567,6 @@ public class ChallengeController implements Initializable {
                 return "linear-gradient(to bottom right, #9B59B6, #8E44AD)";
         }
 
-
     }
 
     /* ================= CARTE DÉTAIL CHALLENGE ================= */
@@ -2535,8 +2591,7 @@ public class ChallengeController implements Initializable {
                             "-fx-border-color: rgba(255,255,255,0.3);" +
                             "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 25, 0, 0, 10);" +
                             "-fx-min-width: 600;" +
-                            "-fx-max-width: 700;"
-            );
+                            "-fx-max-width: 700;");
 
             // ============= EN-TÊTE AVEC BADGE ET TITRE =============
             HBox headerBox = new HBox(20);
@@ -2547,8 +2602,7 @@ public class ChallengeController implements Initializable {
             iconContainer.setStyle(
                     "-fx-background-color: rgba(255,255,255,0.2);" +
                             "-fx-background-radius: 30;" +
-                            "-fx-padding: 20;"
-            );
+                            "-fx-padding: 20;");
 
             Label mainIcon = new Label(getIconForChallenge(challenge));
             mainIcon.setStyle("-fx-font-size: 48px; -fx-text-fill: white;");
@@ -2562,8 +2616,7 @@ public class ChallengeController implements Initializable {
                     "-fx-font-size: 28px;" +
                             "-fx-font-weight: 900;" +
                             "-fx-text-fill: white;" +
-                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);"
-            );
+                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);");
             titleLabel.setWrapText(true);
 
             HBox typeBadgeBox = new HBox(10);
@@ -2576,8 +2629,7 @@ public class ChallengeController implements Initializable {
                             "-fx-padding: 8 20;" +
                             "-fx-font-size: 14px;" +
                             "-fx-font-weight: bold;" +
-                            "-fx-text-fill: white;"
-            );
+                            "-fx-text-fill: white;");
 
             Label difficultyBadge = new Label(challenge.getNiveauDifficulte());
             difficultyBadge.setStyle(getDifficultyStyle(challenge.getNiveauDifficulte()));
@@ -2605,8 +2657,7 @@ public class ChallengeController implements Initializable {
                                 "-fx-font-weight: bold;" +
                                 "-fx-border-color: rgba(46,204,113,0.8);" +
                                 "-fx-border-radius: 20;" +
-                                "-fx-border-width: 1.5;"
-                );
+                                "-fx-border-width: 1.5;");
             } else {
                 statusLabel.setText("● INACTIF");
                 statusLabel.setStyle(
@@ -2618,8 +2669,7 @@ public class ChallengeController implements Initializable {
                                 "-fx-font-weight: bold;" +
                                 "-fx-border-color: rgba(231,76,60,0.8);" +
                                 "-fx-border-radius: 20;" +
-                                "-fx-border-width: 1.5;"
-                );
+                                "-fx-border-width: 1.5;");
             }
 
             headerBox.getChildren().add(statusBox);
@@ -2630,8 +2680,7 @@ public class ChallengeController implements Initializable {
                     "-fx-background-color: rgba(255,255,255,0.3);" +
                             "-fx-background-insets: 0;" +
                             "-fx-background-radius: 2;" +
-                            "-fx-pref-height: 2;"
-            );
+                            "-fx-pref-height: 2;");
 
             // ============= SECTION DESCRIPTION =============
             VBox descriptionSection = new VBox(15);
@@ -2640,8 +2689,7 @@ public class ChallengeController implements Initializable {
             descTitle.setStyle(
                     "-fx-font-size: 16px;" +
                             "-fx-font-weight: 700;" +
-                            "-fx-text-fill: rgba(255,255,255,0.9);"
-            );
+                            "-fx-text-fill: rgba(255,255,255,0.9);");
 
             Label descriptionContent = new Label(challenge.getDescription());
             descriptionContent.setWrapText(true);
@@ -2654,14 +2702,14 @@ public class ChallengeController implements Initializable {
                             "-fx-background-radius: 15;" +
                             "-fx-border-color: rgba(255,255,255,0.2);" +
                             "-fx-border-radius: 15;" +
-                            "-fx-border-width: 1;"
-            );
+                            "-fx-border-width: 1;");
             descriptionContent.setMaxWidth(620);
 
             descriptionSection.getChildren().addAll(descTitle, descriptionContent);
 
             // ============= GRILLE D'INFORMATIONS PRINCIPALES =============
-            // ============= GRILLE D'INFORMATIONS PRINCIPALES - VERSION AMÉLIORÉE =============
+            // ============= GRILLE D'INFORMATIONS PRINCIPALES - VERSION AMÉLIORÉE
+            // =============
             GridPane infoGrid = new GridPane();
             infoGrid.setHgap(20);
             infoGrid.setVgap(15);
@@ -2672,7 +2720,7 @@ public class ChallengeController implements Initializable {
                             "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" // Ombre légère
             );
 
-// Configuration des colonnes
+            // Configuration des colonnes
             ColumnConstraints col1 = new ColumnConstraints();
             col1.setPrefWidth(200);
             col1.setHgrow(Priority.SOMETIMES);
@@ -2687,34 +2735,34 @@ public class ChallengeController implements Initializable {
 
             infoGrid.getColumnConstraints().addAll(col1, col2, col3);
 
-// ===== LIGNE 1 =====
-// DURÉE
+            // ===== LIGNE 1 =====
+            // DURÉE
             VBox durationBox = createModernInfoBox("⏱️", "DURÉE",
                     challenge.getDureeJours() + " jours", "#2C3E50");
             infoGrid.add(durationBox, 0, 0);
 
-// DIFFICULTÉ
+            // DIFFICULTÉ
             VBox difficultyBox = createModernInfoBox("🎯", "DIFFICULTÉ",
                     challenge.getNiveauDifficulte(), getDifficultyTextColor(challenge.getNiveauDifficulte()));
             infoGrid.add(difficultyBox, 1, 0);
 
-// DATE DE CRÉATION
+            // DATE DE CRÉATION
             VBox creationBox = createModernInfoBox("📅", "DATE DE CRÉATION",
                     getFormattedDate(challenge), "#16A085");
             infoGrid.add(creationBox, 2, 0);
 
-// ===== LIGNE 2 =====
-// TYPE
+            // ===== LIGNE 2 =====
+            // TYPE
             VBox typeInfoBox = createModernInfoBox("📂", "TYPE",
                     challenge.getTypeChallenge(), "#E67E22");
             infoGrid.add(typeInfoBox, 0, 1);
 
-// ID CHALLENGE
+            // ID CHALLENGE
             VBox idBox = createModernInfoBox("🆔", "ID CHALLENGE",
                     "#" + challenge.getIdChallenge(), "#7F8C8D");
             infoGrid.add(idBox, 1, 1);
 
-// DATE D'EXPIRATION
+            // DATE D'EXPIRATION
             LocalDateTime expirationDate = LocalDateTime.now().plusDays(challenge.getDureeJours());
             String expirationDateStr = expirationDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
             VBox expirationBox = createModernInfoBox("⏰", "DATE D'EXPIRATION",
@@ -2723,11 +2771,10 @@ public class ChallengeController implements Initializable {
 
             // Récupérer les coaches et récompenses associés
             List<CoachMotivation> coaches = challengeCoachCrud.getCoachesForChallenge(challenge.getIdChallenge());
-            List<Recompense> recompenses = challengeRecompenseCrud.getRecompensesByChallenge(challenge.getIdChallenge());
+            List<Recompense> recompenses = challengeRecompenseCrud
+                    .getRecompensesByChallenge(challenge.getIdChallenge());
 
-
-
-// ============= AJOUTER LE BLOCK statsBox ICI =============
+            // ============= AJOUTER LE BLOCK statsBox ICI =============
             HBox statsBox = new HBox(20);
             statsBox.setAlignment(Pos.CENTER_LEFT);
             statsBox.setStyle(
@@ -2736,10 +2783,8 @@ public class ChallengeController implements Initializable {
                             "-fx-background-radius: 15;" +
                             "-fx-border-color: rgba(255,255,255,0.1);" +
                             "-fx-border-radius: 15;" +
-                            "-fx-border-width: 1;"
-            );
-// =======================================================
-
+                            "-fx-border-width: 1;");
+            // =======================================================
 
             // Badge Coaches
             VBox coachStatsBox = new VBox(8);
@@ -2782,9 +2827,9 @@ public class ChallengeController implements Initializable {
             Label statusIcon = new Label("⚡");
             statusIcon.setStyle("-fx-font-size: 20px;");
             Label statusValue = new Label(challenge.isActif() ? "ACTIF" : "INACTIF");
-            statusValue.setStyle(challenge.isActif() ?
-                    "-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #2ECC71;" :
-                    "-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #E74C3C;");
+            statusValue
+                    .setStyle(challenge.isActif() ? "-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #2ECC71;"
+                            : "-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #E74C3C;");
             statusHeader.getChildren().addAll(statusIcon, statusValue);
 
             Label statusDesc = new Label("État actuel");
@@ -2800,8 +2845,7 @@ public class ChallengeController implements Initializable {
                 coachesTitle.setStyle(
                         "-fx-font-size: 14px;" +
                                 "-fx-font-weight: 700;" +
-                                "-fx-text-fill: rgba(255,255,255,0.9);"
-                );
+                                "-fx-text-fill: rgba(255,255,255,0.9);");
 
                 // CORRECTION: Utiliser FlowPane au lieu de HBox avec setWrapText
                 FlowPane coachesList = new FlowPane(Orientation.HORIZONTAL, 15, 15);
@@ -2820,8 +2864,7 @@ public class ChallengeController implements Initializable {
                                     "-fx-background-radius: 20;" +
                                     "-fx-padding: 8 15;" +
                                     "-fx-font-size: 12px;" +
-                                    "-fx-text-fill: white;"
-                    );
+                                    "-fx-text-fill: white;");
                     moreLabel.setAlignment(Pos.CENTER);
 
                     // Centrer verticalement
@@ -2841,8 +2884,7 @@ public class ChallengeController implements Initializable {
                 rewardsTitle.setStyle(
                         "-fx-font-size: 14px;" +
                                 "-fx-font-weight: 700;" +
-                                "-fx-text-fill: rgba(255,255,255,0.9);"
-                );
+                                "-fx-text-fill: rgba(255,255,255,0.9);");
 
                 // CORRECTION: Utiliser FlowPane au lieu de HBox avec setWrapText
                 FlowPane rewardsList = new FlowPane(Orientation.HORIZONTAL, 15, 15);
@@ -2861,8 +2903,7 @@ public class ChallengeController implements Initializable {
                                     "-fx-background-radius: 20;" +
                                     "-fx-padding: 8 15;" +
                                     "-fx-font-size: 12px;" +
-                                    "-fx-text-fill: white;"
-                    );
+                                    "-fx-text-fill: white;");
                     moreLabel.setAlignment(Pos.CENTER);
 
                     // Centrer verticalement
@@ -2884,8 +2925,7 @@ public class ChallengeController implements Initializable {
             footerLabel.setStyle(
                     "-fx-font-size: 11px;" +
                             "-fx-text-fill: rgba(255,255,255,0.6);" +
-                            "-fx-font-style: italic;"
-            );
+                            "-fx-font-style: italic;");
             footerBox.getChildren().add(footerLabel);
 
             // ============= BOUTON FERMER =============
@@ -2898,8 +2938,7 @@ public class ChallengeController implements Initializable {
                             "-fx-padding: 12 40;" +
                             "-fx-background-radius: 30;" +
                             "-fx-cursor: hand;" +
-                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);"
-            );
+                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);");
 
             closeButton.setOnMouseEntered(e -> {
                 closeButton.setStyle(
@@ -2910,8 +2949,7 @@ public class ChallengeController implements Initializable {
                                 "-fx-padding: 12 40;" +
                                 "-fx-background-radius: 30;" +
                                 "-fx-cursor: hand;" +
-                                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);"
-                );
+                                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);");
             });
 
             closeButton.setOnMouseExited(e -> {
@@ -2922,8 +2960,7 @@ public class ChallengeController implements Initializable {
                                 "-fx-font-size: 14px;" +
                                 "-fx-padding: 12 40;" +
                                 "-fx-background-radius: 30;" +
-                                "-fx-cursor: hand;"
-                );
+                                "-fx-cursor: hand;");
             });
 
             closeButton.setOnAction(e -> detailStage.close());
@@ -2935,8 +2972,7 @@ public class ChallengeController implements Initializable {
                     separator,
                     descriptionSection,
                     infoGrid,
-                    statsBox
-            );
+                    statsBox);
 
             if (!coaches.isEmpty()) {
                 content.getChildren().add(coachesSection);
@@ -2955,8 +2991,7 @@ public class ChallengeController implements Initializable {
             scrollPane.setStyle(
                     "-fx-background-color: transparent;" +
                             "-fx-background: transparent;" +
-                            "-fx-border-color: transparent;"
-            );
+                            "-fx-border-color: transparent;");
             scrollPane.setFitToWidth(true);
             scrollPane.setFitToHeight(true);
 
@@ -2966,12 +3001,15 @@ public class ChallengeController implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible d'afficher les détails du challenge: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible d'afficher les détails du challenge: " + e.getMessage(),
+                    Alert.AlertType.ERROR);
         }
     }
 
-
-    /* ================= MISSING HELPER METHODS FOR CHALLENGE DETAIL CARD ================= */
+    /*
+     * ================= MISSING HELPER METHODS FOR CHALLENGE DETAIL CARD
+     * =================
+     */
 
     /**
      * Returns a gradient color based on challenge status and difficulty
@@ -3056,8 +3094,7 @@ public class ChallengeController implements Initializable {
         box.setStyle(
                 "-fx-padding: 12;" +
                         "-fx-background-color: rgba(255,255,255,0.15);" +
-                        "-fx-background-radius: 12;"
-        );
+                        "-fx-background-radius: 12;");
 
         HBox header = new HBox(10);
         header.setAlignment(Pos.CENTER_LEFT);
@@ -3069,8 +3106,7 @@ public class ChallengeController implements Initializable {
         titleLabel.setStyle(
                 "-fx-font-size: 11px;" +
                         "-fx-font-weight: bold;" +
-                        "-fx-text-fill: rgba(255,255,255,0.8);"
-        );
+                        "-fx-text-fill: rgba(255,255,255,0.8);");
 
         header.getChildren().addAll(iconLabel, titleLabel);
 
@@ -3078,8 +3114,7 @@ public class ChallengeController implements Initializable {
         valueLabel.setStyle(
                 "-fx-font-size: 16px;" +
                         "-fx-font-weight: 900;" +
-                        "-fx-text-fill: " + color + ";"
-        );
+                        "-fx-text-fill: " + color + ";");
         valueLabel.setWrapText(true);
 
         box.getChildren().addAll(header, valueLabel);
@@ -3124,7 +3159,8 @@ public class ChallengeController implements Initializable {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 
         // If you add a creationDate field to Challenge class, use:
-        // return challenge.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        // return
+        // challenge.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     /**
@@ -3138,8 +3174,7 @@ public class ChallengeController implements Initializable {
                         "-fx-background-radius: 12;" +
                         "-fx-padding: 12 15;" +
                         "-fx-min-width: 140;" +
-                        "-fx-max-width: 140;"
-        );
+                        "-fx-max-width: 140;");
 
         // Avatar
         Label avatarIcon = new Label("👤");
@@ -3150,8 +3185,7 @@ public class ChallengeController implements Initializable {
         nameLabel.setStyle(
                 "-fx-font-size: 13px;" +
                         "-fx-font-weight: bold;" +
-                        "-fx-text-fill: white;"
-        );
+                        "-fx-text-fill: white;");
         nameLabel.setWrapText(true);
         nameLabel.setAlignment(Pos.CENTER);
 
@@ -3159,8 +3193,7 @@ public class ChallengeController implements Initializable {
         Label styleLabel = new Label(coach.getStyle());
         styleLabel.setStyle(
                 "-fx-font-size: 11px;" +
-                        "-fx-text-fill: rgba(255,255,255,0.8);"
-        );
+                        "-fx-text-fill: rgba(255,255,255,0.8);");
 
         card.getChildren().addAll(avatarIcon, nameLabel, styleLabel);
 
@@ -3171,8 +3204,7 @@ public class ChallengeController implements Initializable {
                             "-fx-background-radius: 12;" +
                             "-fx-padding: 12 15;" +
                             "-fx-min-width: 140;" +
-                            "-fx-max-width: 140;"
-            );
+                            "-fx-max-width: 140;");
         });
 
         card.setOnMouseExited(e -> {
@@ -3181,8 +3213,7 @@ public class ChallengeController implements Initializable {
                             "-fx-background-radius: 12;" +
                             "-fx-padding: 12 15;" +
                             "-fx-min-width: 140;" +
-                            "-fx-max-width: 140;"
-            );
+                            "-fx-max-width: 140;");
         });
 
         card.setCursor(Cursor.HAND);
@@ -3202,8 +3233,7 @@ public class ChallengeController implements Initializable {
                         "-fx-background-radius: 12;" +
                         "-fx-padding: 12 15;" +
                         "-fx-min-width: 140;" +
-                        "-fx-max-width: 140;"
-        );
+                        "-fx-max-width: 140;");
 
         // Icon based on reward type
         Label iconLabel = new Label(getIconForRecompenseType(reward.getTypeRecompense()));
@@ -3214,8 +3244,7 @@ public class ChallengeController implements Initializable {
         titleLabel.setStyle(
                 "-fx-font-size: 13px;" +
                         "-fx-font-weight: bold;" +
-                        "-fx-text-fill: white;"
-        );
+                        "-fx-text-fill: white;");
         titleLabel.setWrapText(true);
         titleLabel.setAlignment(Pos.CENTER);
 
@@ -3223,8 +3252,7 @@ public class ChallengeController implements Initializable {
         Label typeLabel = new Label(reward.getTypeRecompense());
         typeLabel.setStyle(
                 "-fx-font-size: 11px;" +
-                        "-fx-text-fill: rgba(255,255,255,0.8);"
-        );
+                        "-fx-text-fill: rgba(255,255,255,0.8);");
 
         card.getChildren().addAll(iconLabel, titleLabel, typeLabel);
 
@@ -3235,8 +3263,7 @@ public class ChallengeController implements Initializable {
                             "-fx-background-radius: 12;" +
                             "-fx-padding: 12 15;" +
                             "-fx-min-width: 140;" +
-                            "-fx-max-width: 140;"
-            );
+                            "-fx-max-width: 140;");
         });
 
         card.setOnMouseExited(e -> {
@@ -3245,8 +3272,7 @@ public class ChallengeController implements Initializable {
                             "-fx-background-radius: 12;" +
                             "-fx-padding: 12 15;" +
                             "-fx-min-width: 140;" +
-                            "-fx-max-width: 140;"
-            );
+                            "-fx-max-width: 140;");
         });
 
         card.setCursor(Cursor.HAND);
@@ -3254,7 +3280,6 @@ public class ChallengeController implements Initializable {
 
         return card;
     }
-
 
     /**
      * Crée une carte d'information moderne avec texte noir sur fond blanc
@@ -3269,8 +3294,7 @@ public class ChallengeController implements Initializable {
                         "-fx-border-color: #ECF0F1;" +
                         "-fx-border-radius: 10;" +
                         "-fx-border-width: 1;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 1);"
-        );
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 1);");
         box.setPrefWidth(200);
         box.setMaxWidth(Double.MAX_VALUE);
 
@@ -3286,8 +3310,7 @@ public class ChallengeController implements Initializable {
                 "-fx-font-size: 11px;" +
                         "-fx-font-weight: bold;" +
                         "-fx-text-fill: #7F8C8D;" + // Gris foncé
-                        "-fx-uppercase: true;"
-        );
+                        "-fx-uppercase: true;");
 
         header.getChildren().addAll(iconLabel, titleLabel);
 
@@ -3309,7 +3332,8 @@ public class ChallengeController implements Initializable {
      * Retourne une couleur de texte selon la difficulté
      */
     private String getDifficultyTextColor(String difficulty) {
-        if (difficulty == null) return "#2C3E50";
+        if (difficulty == null)
+            return "#2C3E50";
 
         switch (difficulty.toLowerCase()) {
             case "facile":

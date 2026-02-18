@@ -1,4 +1,4 @@
-package org.example.dao;
+package org.example.dao.motivation;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
     private static final String URL = "jdbc:mysql://localhost:3306/psy?useSSL=false&serverTimezone=UTC";
-    private static final String USER = "root";       // ton user MySQL
-    private static final String PASSWORD = "";       // ton mot de passe MySQL
+    private static final String USER = "root"; // ton user MySQL
+    private static final String PASSWORD = ""; // ton mot de passe MySQL
 
     public static Connection getConnection() {
         Connection connection = null;

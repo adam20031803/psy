@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.model.motivation;
 
 public class CoachMotivation {
     private int idCoach;
@@ -9,7 +9,8 @@ public class CoachMotivation {
     private boolean actif;
 
     // Constructeurs
-    public CoachMotivation() {}
+    public CoachMotivation() {
+    }
 
     public CoachMotivation(String nomCoach,String email, String style, String description) {
         this.nomCoach = nomCoach;
