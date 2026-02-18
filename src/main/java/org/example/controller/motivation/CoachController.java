@@ -784,16 +784,8 @@ public class CoachController implements Initializable {
     }
 
     // Méthode pour afficher les détails du coach
-    private void showCoachDetail(CoachMotivation coach) {
-        // À implémenter: fenêtre modale avec détails complets
-        showAlert("Détails Coach",
-                "Nom: " + coach.getNomCoach() + "\n" +
-                        "Style: " + coach.getStyle() + "\n" +
-                        "Description: " + coach.getDescription() + "\n" +
-                        "Statut: " + (coach.isActif() ? "Actif" : "Inactif") + "\n" +
-                        "Challenges assignés: " + challengeCoachCrud.getChallengeCountForCoach(coach.getIdCoach()),
-                Alert.AlertType.INFORMATION);
-    }
+    // Remplacez la méthode showCoachDetail existante par celle-ci
+
 
 
 
@@ -1057,6 +1049,8 @@ public class CoachController implements Initializable {
         return y - 25;
     }
 
+
+
     private void createCoachDetailsPages(PDDocument document) throws Exception {
         int pageNumber = 3;
         int coachesPerPage = 2;
@@ -1222,4 +1216,10 @@ public class CoachController implements Initializable {
         String normalized = Normalizer.normalize(text, Normalizer.Form.NFD);
         return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
+
+
+
+
+
+
 }

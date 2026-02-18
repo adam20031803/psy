@@ -35,6 +35,16 @@
                             AnchorPane.rightAnchor="0"/>
             </AnchorPane>
         </Tab>
+        <Tab text="Gérer les rmotivations">
+            <AnchorPane>
+                <fx:include source="motivation/MainView.fxml"
+                            AnchorPane.topAnchor="0"
+                            AnchorPane.bottomAnchor="0"
+                            AnchorPane.leftAnchor="0"
+                            AnchorPane.rightAnchor="0"/>
+            </AnchorPane>
+        </Tab>
+
 
     </TabPane>
 

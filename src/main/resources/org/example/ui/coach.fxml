@@ -250,6 +250,16 @@
                                               -fx-border-width: 1.5; -fx-font-size: 13px;"/>
                         </VBox>
 
+
+                        <!-- Email -->
+                        <VBox spacing="5">
+                            <Label text="Email du Coach" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495E;"/>
+                            <TextField fx:id="emailField" promptText="Ex: john.doe@example.com"
+                                       style="-fx-background-color: #F8F9FA; -fx-background-radius: 10;
+                      -fx-padding: 12; -fx-border-color: #E0E0E0; -fx-border-radius: 10;
+                      -fx-border-width: 1.5; -fx-font-size: 13px;"/>
+                        </VBox>
+
                         <!-- Style -->
                         <VBox spacing="5">
                             <Label text="Style de Coaching" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495E;"/>

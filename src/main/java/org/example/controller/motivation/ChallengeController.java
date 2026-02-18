@@ -42,6 +42,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import java.awt.Color;
 
 
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -53,12 +54,17 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
 
 
+
+
+import javafx.scene.Cursor;
+import javafx.scene.shape.Circle;
 import java.awt.Color;
 import javafx.scene.layout.StackPane;
 
 
 import javafx.scene.Cursor;
 import javafx.scene.shape.Circle;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.control.ScrollPane;
@@ -68,6 +74,14 @@ import javafx.scene.control.Separator;
 import javafx.geometry.Orientation;
 import javafx.scene.layout.FlowPane;
 
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
+
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 
 public class ChallengeController implements Initializable {
@@ -141,6 +155,11 @@ public class ChallengeController implements Initializable {
     @FXML
     private Label inactifsLabel;
 
+
+    @FXML private HBox sortBox;
+    private ToggleGroup sortToggleGroup;
+    private String currentSortType = "date_desc";
+
     /* ================= DATA ================= */
     //flexible au modification
     private final ObservableList<Challenge> challengeList = FXCollections.observableArrayList();
@@ -154,6 +173,7 @@ public class ChallengeController implements Initializable {
 
     //Méthode appelée automatiquement par JavaFX après le chargement du fichier FXML
     @Override
+
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("=== INITIALIZATION START ===");
         System.out.println("totalLabel is null? " + (totalLabel == null));
@@ -163,7 +183,8 @@ public class ChallengeController implements Initializable {
         setupListView();
         setupForm();
         setupButtons();
-        setupInputValidation(); // AJOUT DU CONTRÔLE DE SAISIE
+        setupInputValidation();
+        setupSortControls(); // AJOUTER CETTE LIGNE
         loadData();
         updateStatistics();
 
@@ -551,7 +572,7 @@ public class ChallengeController implements Initializable {
         exportBtn.setOnAction(e -> exportToPDF());
 
         dashboardBtn.setOnAction(e -> goToDashboard());
-         //getSelectionModel:’est l’objet qui gère :Quel élément est sélectionné
+        //getSelectionModel:’est l’objet qui gère :Quel élément est sélectionné
         //selectedItemProperty():L’élément actuellement sélectionné dans la ListView.
         //addListener(...):Quand la sélection change → on exécute la lambda.
 
@@ -817,22 +838,25 @@ public class ChallengeController implements Initializable {
 
     private void searchChallenges() {
         String keyword = searchField.getText().toLowerCase().trim();
+
+        List<Challenge> filtered;
+
         if (keyword.isEmpty()) {
-            loadData();
-            return;
+            filtered = challengeCrud.readAll();
+        } else {
+            filtered = challengeCrud.readAll().stream()
+                    .filter(c ->
+                            c.getTitre().toLowerCase().contains(keyword) ||
+                                    c.getDescription().toLowerCase().contains(keyword) ||
+                                    c.getTypeChallenge().toLowerCase().contains(keyword) ||
+                                    c.getNiveauDifficulte().toLowerCase().contains(keyword)
+                    )
+                    .collect(Collectors.toList());
         }
 
-        List<Challenge> filtered = challengeCrud.readAll().stream()
-                .filter(c ->
-                        c.getTitre().toLowerCase().contains(keyword) ||
-                                c.getDescription().toLowerCase().contains(keyword) ||
-                                c.getTypeChallenge().toLowerCase().contains(keyword) ||
-                                c.getNiveauDifficulte().toLowerCase().contains(keyword)
-                )
-                .collect(Collectors.toList());
-
-        challengeListView.setItems(FXCollections.observableArrayList(filtered));
-        updateStatistics();
+        // Appliquer le tri actuel sur les résultats filtrés
+        challengeList.setAll(filtered);
+        sortChallenges(currentSortType); // Réappliquer le tri
     }
 
     /* ================= CRUD ================= */
@@ -1965,7 +1989,7 @@ public class ChallengeController implements Initializable {
 
                         VBox infoBox = new VBox(5);
                         Label nameLabel = new Label(coach.getNomCoach());
-                        nameLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 14px;");
+                        nameLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #000000; -fx-font-size: 14px;");
 
                         Label styleLabel = new Label("Style: " + coach.getStyle());
                         styleLabel.setStyle("-fx-text-fill: #BDC3C7; -fx-font-size: 12px;");
@@ -1980,7 +2004,28 @@ public class ChallengeController implements Initializable {
 
                         Button detailBtn = new Button("📋 Détails");
                         detailBtn.setStyle("-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10;");
-                        detailBtn.setOnAction(e -> showCoachDetail(coach));
+                        detailBtn.setOnAction(e -> {
+                            try {
+                                // Créer une instance du CRUD pour recharger le coach complet
+                                CoachMotivationCrud coachCrud = new CoachMotivationCrud();
+
+                                // Recharger tous les coaches
+                                List<CoachMotivation> allCoaches = coachCrud.readAll();
+
+                                // Trouver le coach avec le même ID (qui aura toutes ses données, y compris l'email)
+                                CoachMotivation fullCoach = allCoaches.stream()
+                                        .filter(c -> c.getIdCoach() == coach.getIdCoach())
+                                        .findFirst()
+                                        .orElse(coach); // Fallback sur l'objet original si non trouvé
+
+                                // Afficher les détails avec le coach complet
+                                showCoachDetail(fullCoach);
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                showAlert("Erreur", "Impossible de charger les détails du coach", Alert.AlertType.ERROR);
+                            }
+                        });
 
                         Region spacer = new Region();
                         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -2191,10 +2236,11 @@ public class ChallengeController implements Initializable {
             header.getChildren().addAll(profilePane, headerInfo);
 
             // Section des informations
+            // ========== SECTION DES INFORMATIONS ==========
             VBox infoSection = new VBox(15);
             infoSection.setStyle("-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 15;");
 
-            // Style de coaching
+// Style de coaching
             HBox styleBox = new HBox(10);
             styleBox.setAlignment(Pos.CENTER_LEFT);
             Label styleIcon = new Label("🎭");
@@ -2204,7 +2250,29 @@ public class ChallengeController implements Initializable {
             styleValue.setStyle("-fx-text-fill: #F1C40F; -fx-font-weight: bold;");
             styleBox.getChildren().addAll(styleIcon, styleTitle, styleValue);
 
-            // Description
+// EMAIL
+            HBox emailBox = new HBox(10);
+            emailBox.setAlignment(Pos.CENTER_LEFT);
+            Label emailIcon = new Label("📧");
+            Label emailTitle = new Label("Email:");
+            emailTitle.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 100;");
+
+            String emailText = coach.getEmail();
+            Label emailValue = new Label();
+
+            if (emailText != null && !emailText.isEmpty() && !emailText.equals("null")) {
+                emailValue.setText(emailText);
+                emailValue.setStyle("-fx-text-fill: #3498DB; -fx-font-weight: bold; -fx-font-size: 13px;");
+                emailValue.setWrapText(true);
+                emailValue.setMaxWidth(350);
+                emailValue.setTooltip(new Tooltip("Email: " + emailText));
+            } else {
+                emailValue.setText("Non renseigné");
+                emailValue.setStyle("-fx-text-fill: #7F8C8D; -fx-font-style: italic; -fx-font-size: 12px;");
+            }
+            emailBox.getChildren().addAll(emailIcon, emailTitle, emailValue);
+
+// Description
             HBox descBox = new HBox(10);
             descBox.setAlignment(Pos.CENTER_LEFT);
             Label descIcon = new Label("📝");
@@ -2217,10 +2285,9 @@ public class ChallengeController implements Initializable {
             descValue.setStyle("-fx-text-fill: #2ECC71; -fx-font-size: 12px;");
             descValue.setWrapText(true);
             descValue.setMaxWidth(350);
-
             descBox.getChildren().addAll(descIcon, descTitle, descValue);
 
-            // Statut
+// Statut
             HBox statusBox = new HBox(10);
             statusBox.setAlignment(Pos.CENTER_LEFT);
             Label statusIcon = new Label("📈");
@@ -2232,7 +2299,7 @@ public class ChallengeController implements Initializable {
                     "-fx-text-fill: #E74C3C; -fx-font-weight: bold;");
             statusBox.getChildren().addAll(statusIcon, statusTitle, statusValue);
 
-            // ID Coach (informations techniques)
+// ID Coach
             HBox idBox = new HBox(10);
             idBox.setAlignment(Pos.CENTER_LEFT);
             Label idIcon = new Label("🆔");
@@ -2242,7 +2309,8 @@ public class ChallengeController implements Initializable {
             idValue.setStyle("-fx-text-fill: #BDC3C7; -fx-font-size: 12px;");
             idBox.getChildren().addAll(idIcon, idTitle, idValue);
 
-            infoSection.getChildren().addAll(styleBox, descBox, statusBox, idBox);
+// Assembler toutes les informations
+            infoSection.getChildren().addAll(styleBox, emailBox, descBox, statusBox, idBox);
 
             // Bouton fermer
             Button closeButton = new Button("Fermer");
@@ -3254,6 +3322,176 @@ public class ChallengeController implements Initializable {
                 return "#8E44AD"; // Violet
             default:
                 return "#2C3E50"; // Gris foncé
+        }
+    }
+
+
+
+    /* ================= CONFIGURATION DU SYSTÈME DE TRI ================= */
+    private void setupSortControls() {
+        // Créer le conteneur pour les boutons de tri
+        HBox sortContainer = new HBox(15);
+        sortContainer.setAlignment(Pos.CENTER_LEFT);
+        sortContainer.setStyle("-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 25; -fx-padding: 10 20;");
+
+        // Label "TRIER PAR :"
+        Label sortLabel = new Label("🔽 TRIER PAR :");
+        sortLabel.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #B4C6E7; -fx-letter-spacing: 1px;");
+
+        // Groupe de bascules pour les radios
+        sortToggleGroup = new ToggleGroup();
+
+        // Style commun pour les boutons radio
+        String radioStyle = "-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 5 10;";
+
+        // Bouton radio : Nom (A-Z)
+        RadioButton nameAZBtn = createStyledRadio("👤 Nom (A-Z)", "name_asc", radioStyle);
+
+        // Bouton radio : Nom (Z-A)
+        RadioButton nameZABtn = createStyledRadio("👤 Nom (Z-A)", "name_desc", radioStyle);
+
+        // Bouton radio : Durée (croissante)
+        RadioButton durationAscBtn = createStyledRadio("⏱️ Durée ↑", "duration_asc", radioStyle);
+
+        // Bouton radio : Durée (décroissante)
+        RadioButton durationDescBtn = createStyledRadio("⏱️ Durée ↓", "duration_desc", radioStyle);
+
+        // Bouton radio : Date (récent → ancien)
+        RadioButton dateDescBtn = createStyledRadio("📅 Plus récent", "date_desc", radioStyle);
+
+        // Bouton radio : Date (ancien → récent)
+        RadioButton dateAscBtn = createStyledRadio("📅 Plus ancien", "date_asc", radioStyle);
+
+        // Bouton radio : Statut (actifs en premier)
+        RadioButton statusActiveBtn = createStyledRadio("✅ Actifs", "status_active", radioStyle);
+
+        // Bouton radio : Statut (inactifs en premier)
+        RadioButton statusInactiveBtn = createStyledRadio("❌ Inactifs", "status_inactive", radioStyle);
+
+        // Définir le tri par défaut (plus récent)
+        dateDescBtn.setSelected(true);
+
+        // Ajouter les listeners pour chaque bouton
+        nameAZBtn.setOnAction(e -> sortChallenges("name_asc"));
+        nameZABtn.setOnAction(e -> sortChallenges("name_desc"));
+        durationAscBtn.setOnAction(e -> sortChallenges("duration_asc"));
+        durationDescBtn.setOnAction(e -> sortChallenges("duration_desc"));
+        dateDescBtn.setOnAction(e -> sortChallenges("date_desc"));
+        dateAscBtn.setOnAction(e -> sortChallenges("date_asc"));
+        statusActiveBtn.setOnAction(e -> sortChallenges("status_active"));
+        statusInactiveBtn.setOnAction(e -> sortChallenges("status_inactive"));
+
+        // Ajouter les boutons au conteneur
+        sortContainer.getChildren().addAll(
+                sortLabel,
+                nameAZBtn, nameZABtn,
+                durationAscBtn, durationDescBtn,
+                dateDescBtn, dateAscBtn,
+                statusActiveBtn, statusInactiveBtn
+        );
+
+        // Ajouter le conteneur à l'interface (à côté de la recherche)
+        // Vous devez avoir un conteneur dans votre FXML avec fx:id="sortBox"
+        // Si vous n'en avez pas, vous pouvez l'ajouter dans le header
+        if (sortBox != null) {
+            sortBox.getChildren().add(sortContainer);
+        } else {
+            // Alternative : chercher le conteneur parent et l'ajouter
+            HBox headerRight = (HBox) searchField.getParent();
+            headerRight.getChildren().add(1, sortContainer); // Ajouter après la recherche
+        }
+    }
+
+
+    private RadioButton createStyledRadio(String text, String userData, String style) {
+        RadioButton radio = new RadioButton(text);
+        radio.setToggleGroup(sortToggleGroup);
+        radio.setUserData(userData);
+        radio.setStyle(style);
+
+        // Style au survol
+        radio.setOnMouseEntered(e ->
+                radio.setStyle("-fx-text-fill: #00f2fe; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 5 10;")
+        );
+        radio.setOnMouseExited(e ->
+                radio.setStyle("-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 5 10;")
+        );
+
+        return radio;
+    }
+
+    private void sortChallenges(String sortType) {
+        currentSortType = sortType;
+
+        // Récupérer la liste actuelle (filtrée ou complète)
+        ObservableList<Challenge> currentList = challengeListView.getItems();
+        List<Challenge> sortedList = new ArrayList<>(currentList);
+
+        // Appliquer le tri selon le type
+        switch (sortType) {
+            case "name_asc":
+                sortedList.sort(Comparator.comparing(Challenge::getTitre, String.CASE_INSENSITIVE_ORDER));
+                break;
+            case "name_desc":
+                sortedList.sort((c1, c2) -> c2.getTitre().compareToIgnoreCase(c1.getTitre()));
+                break;
+            case "duration_asc":
+                sortedList.sort(Comparator.comparingInt(Challenge::getDureeJours));
+                break;
+            case "duration_desc":
+                sortedList.sort((c1, c2) -> Integer.compare(c2.getDureeJours(), c1.getDureeJours()));
+                break;
+            case "date_desc":
+                // Tri par ID (le plus récent = ID le plus grand)
+                sortedList.sort((c1, c2) -> Integer.compare(c2.getIdChallenge(), c1.getIdChallenge()));
+                break;
+            case "date_asc":
+                // Tri par ID (le plus ancien = ID le plus petit)
+                sortedList.sort(Comparator.comparingInt(Challenge::getIdChallenge));
+                break;
+            case "status_active":
+                // Actifs en premier, puis inactifs
+                sortedList.sort((c1, c2) -> {
+                    if (c1.isActif() && !c2.isActif()) return -1;
+                    if (!c1.isActif() && c2.isActif()) return 1;
+                    return 0;
+                });
+                break;
+            case "status_inactive":
+                // Inactifs en premier, puis actifs
+                sortedList.sort((c1, c2) -> {
+                    if (!c1.isActif() && c2.isActif()) return -1;
+                    if (c1.isActif() && !c2.isActif()) return 1;
+                    return 0;
+                });
+                break;
+        }
+
+        // Mettre à jour la ListView
+        challengeListView.setItems(FXCollections.observableArrayList(sortedList));
+
+        // Animation de confirmation
+        animateSortChange();
+    }
+
+    private void animateSortChange() {
+        // Animation de fondu pour la ListView
+        javafx.animation.FadeTransition fade = new javafx.animation.FadeTransition(
+                javafx.util.Duration.millis(300), challengeListView
+        );
+        fade.setFromValue(0.5);
+        fade.setToValue(1.0);
+        fade.play();
+
+        // Petit effet sonore visuel (changement de couleur du header)
+        if (sortBox != null && !sortBox.getChildren().isEmpty()) {
+            HBox sortContainer = (HBox) sortBox.getChildren().get(0);
+            String originalStyle = sortContainer.getStyle();
+            sortContainer.setStyle("-fx-background-color: rgba(0,242,254,0.3); -fx-background-radius: 25; -fx-padding: 10 20;");
+
+            javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(javafx.util.Duration.millis(200));
+            pause.setOnFinished(e -> sortContainer.setStyle(originalStyle));
+            pause.play();
         }
     }
 }
